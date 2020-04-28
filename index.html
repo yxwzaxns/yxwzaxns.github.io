@@ -1,10 +1,41 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>aong's blog</title>
-  </head>
-  <body>
-    hello
-  </body>
+<head>
+<meta charset="utf-8">
+<title>aong's</title>
+<style media="screen">
+body {
+padding:0;
+margin:0;
+overflow:hidden;
+height: 600px;
+}
+canvas {
+padding:0;
+margin:0;
+}
+div.btnbg {
+position:fixed;
+left:0;
+top:0;
+}
+</style>
+</head>
+<body>
+    <canvas id="sakura"></canvas>
+    <div class="btnbg">
+    </div>
+
+<script src="/static/js/sakura_point_vsh.js"></script>
+<script src="/static/js/sakura_point_fsh.js"></script>
+<script src="/static/js/fx_common_vsh.js" id="fx_common_vsh"></script>
+<script src="/static/js/bg_fsh.js" id="bg_fsh"></script>
+<script src="/static/js/fx_brightbuf_fsh.js" id="fx_brightbuf_fsh"></script>
+<script src="/static/js/fx_dirblur_r4_fsh.js" id="fx_dirblur_r4_fsh"></script>
+<script src="/static/js/fx_common_fsh.js" id="fx_common_fsh"></script>
+<script src="/static/js/pp_final_vsh.js" id="pp_final_vsh" ></script>
+<script src="/static/js/pp_final_fsh.js" id="pp_final_fsh"></script>
+
+<script src="/static/js/sakura.js" charset="utf-8"></script>
+</body>
 </html>
