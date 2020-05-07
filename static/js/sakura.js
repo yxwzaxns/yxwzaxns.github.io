@@ -90,13 +90,10 @@ Matrix44.loadLookAt = function (m, vpos, vlook, vup) {
     m[15] = 1.0;
 };
 
-//
 var timeInfo = {
     'start':0, 'prev':0, // Date
     'delta':0, 'elapsed':0 // Number(sec)
 };
-
-//
 var gl;
 var renderSpec = {
     'width':0,
@@ -230,7 +227,6 @@ function unuseShader(prog) {
     gl.useProgram(null);
 }
 
-/////
 var projection = {
     'angle':60,
     'nearfar':new Float32Array([0.1, 100.0]),
@@ -243,7 +239,6 @@ var camera = {
     'dof':Vector3.create(10.0, 4.0, 8.0),
     'matrix':Matrix44.createIdentity()
 };
-
 var pointFlower = {};
 var meshFlower = {};
 var sceneStandBy = false;
@@ -511,8 +506,6 @@ function renderPointFlowers() {
     gl.disable(gl.BLEND);
 }
 
-// effects
-//common util
 function createEffectProgram(vtxsrc, frgsrc, exunifs, exattrs) {
     var ret = {};
     var unifs = ['uResolution', 'uSrc', 'uDelta'];
@@ -539,7 +532,6 @@ function createEffectProgram(vtxsrc, frgsrc, exunifs, exattrs) {
 
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
     unuseShader(ret.program);
-
     return ret;
 }
 
@@ -604,16 +596,26 @@ function initBackground() {
     //console.log("init background");
 }
 function renderBackground() {
-    gl.disable(gl.DEPTH_TEST);
+    // cubeTexture = gl.createTexture();
+    // cubeImage = new Image();
+    // cubeImage.onload = function() { handleTextureLoaded(cubeImage, cubeTexture); }
+    // cubeImage.src = "./static/bg.jpg";
 
+    gl.disable(gl.DEPTH_TEST);
     useEffect(effectLib.sceneBg, null);
     gl.uniform2f(effectLib.sceneBg.program.uniforms.uTimes, timeInfo.elapsed, timeInfo.delta);
     drawEffect(effectLib.sceneBg);
     unuseEffect(effectLib.sceneBg);
-
     gl.enable(gl.DEPTH_TEST);
 }
-
+function handleTextureLoaded(image, texture) {
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+  gl.generateMipmap(gl.TEXTURE_2D);
+  gl.bindTexture(gl.TEXTURE_2D, null);
+}
 // post process
 var postProcess = {};
 function createPostProcess() {
@@ -673,7 +675,6 @@ function renderPostProcess() {
     gl.enable(gl.DEPTH_TEST);
 }
 
-/////
 var SceneEnv = {};
 function createScene() {
     createEffectLib();
@@ -713,7 +714,7 @@ function renderScene() {
 
 /////
 function onResize(e) {
-    makeCanvasFullScreen(document.getElementById("sakura"));
+    // makeCanvasFullScreen(document.getElementById("sakura"));
     setViewports();
     if(sceneStandBy) {
         initScene();
@@ -766,19 +767,17 @@ function animate() {
 }
 
 function makeCanvasFullScreen(canvas) {
-    var b = document.body;
-	var d = document.documentElement;
-	fullw = Math.max(b.clientWidth , b.scrollWidth, d.scrollWidth, d.clientWidth);
-	fullh = Math.max(b.clientHeight , b.scrollHeight, d.scrollHeight, d.clientHeight);
-	canvas.width = fullw;
-	canvas.height = fullh;
+
 }
 
-window.addEventListener('load', function(e) {
-    var canvas = document.getElementById("sakura");
+function Sakura(p){
+    console.log(p);
+    canvas = document.getElementById(p.id)
+    // set canvas sizes
+    canvas.width = canvas.clientWidth
+	canvas.height = canvas.clientHeight
     try {
-        makeCanvasFullScreen(canvas);
-        gl = canvas.getContext('experimental-webgl');
+        gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl")
     } catch(e) {
         alert("WebGL not supported." + e);
         console.error(e);
@@ -794,9 +793,9 @@ window.addEventListener('load', function(e) {
     timeInfo.start = new Date();
     timeInfo.prev = timeInfo.start;
     animate();
-});
+    this.setLoop(window, 'equestAnimationFrame')
+}
 
-//set window.requestAnimationFrame
-(function (w, r) {
+Sakura.prototype.setLoop = function (w, r) {
     w['r'+r] = w['r'+r] || w['webkitR'+r] || w['mozR'+r] || w['msR'+r] || w['oR'+r] || function(c){ w.setTimeout(c, 1000 / 60); };
-})(window, 'equestAnimationFrame');
+}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WebGL 系列教程</title>
+<script src="./static/js/showdown.min.js" charset="utf-8"></script>
+<link rel="stylesheet" href="./static/css/foundation.min.css">
+<link rel="stylesheet" href="./static/css/main.css">
+</head>
+<body>
+
+<div id="canvas">
+    <canvas  width="800" height="600"></canvas>
+</div>
+<div id="doc"></div>
+<script type="text/md" id="md-text">
+# 模版
+</script>
+<script src="./static/js/init.js" charset="utf-8"></script>
+<script src="./static/js/webgl-utils.js" charset="utf-8"></script>
+<!-- WebGL code -->
+<script type="x-shader/x-vertex" id="vertex-shader">
+precision highp float;
+attribute float a_position;
+attribute float b_position;
+void main() {
+  gl_Position = vec4(a_position, b_position, 0.0, 1.0);
+  gl_PointSize = 64.0;
+}
+</script>
+<script type="x-shader/x-fragment" id="fragment-shader">
+void main() {
+  gl_FragColor = vec4(0.18, 0.54, 0.34, 1.0);
+}
+</script>
+<script type="text/javascript">
+    var canvas = document.querySelector("canvas");
+    var buffer;
+    var gl = canvas.getContext("webgl")
+    || canvas.getContext("experimental-webgl");
+    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+
+    function setupWebGL () {
+        //创建顶点着色器
+        var source = document.querySelector("#vertex-shader").innerHTML;
+        var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+        gl.shaderSource(vertexShader,source);
+        gl.compileShader(vertexShader);
+        //创建片段着色器
+        source = document.querySelector("#fragment-shader").innerHTML
+        var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+        gl.shaderSource(fragmentShader,source);
+        gl.compileShader(fragmentShader);
+
+        //`WebGLProgram 是 WebGL API 的一部分，它由两个WebGLShaders （webgl 着色器）组成，分别为顶点着色器和片元着色器（两种着色器都是采用 GLSL 语言编写的）。创建一个 WebGLProgram 需要调用 GL 上下文的createProgram() 方法，然后调用attachShader()方法附加上着色器，之后你才能将它们连接到一个可用的程序。`
+      program = gl.createProgram();
+      gl.attachShader(program, vertexShader);
+      gl.attachShader(program, fragmentShader);
+      gl.linkProgram(program);
+      //link后就可以清除着色器
+      gl.detachShader(program, vertexShader);
+      gl.detachShader(program, fragmentShader);
+      gl.deleteShader(vertexShader);
+      gl.deleteShader(fragmentShader);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        var linkErrLog = gl.getProgramInfoLog(program);
+        cleanup();
+        document.querySelector("p").innerHTML =
+          "Shader program did not link successfully. "
+          + "Error log: " + linkErrLog;
+        return;
+      }
+
+      initializeAttributes();
+      gl.useProgram(program);
+      gl.drawArrays(gl.POINTS, 0, 1);
+      // cleanup();
+    }
+    function initializeAttributes() {
+      buffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      var seek = new Float32Array([0.0,0.0])
+      gl.bufferData(gl.ARRAY_BUFFER, seek, gl.STATIC_DRAW)
+      gl.vertexAttribPointer(gl.getAttribLocation(program,'b_position'), 1, gl.FLOAT, false, seek.BYTES_PER_ELEMENT*2, seek.BYTES_PER_ELEMENT);
+      gl.vertexAttribPointer(gl.getAttribLocation(program,'a_position'), 1, gl.FLOAT, false, 0, 0);
+      gl.enableVertexAttribArray(0);
+      gl.enableVertexAttribArray(1);
+    }
+    setupWebGL()
+    document.querySelector("canvas").addEventListener("mousemove",
+      function (evt) {
+        var clickXrelativToCanvas = evt.pageX - evt.target.offsetLeft;
+        var clickXinWebGLCoords = 2.0 * (clickXrelativToCanvas- gl.drawingBufferWidth/2) / gl.drawingBufferWidth;
+        var clickYrelativToCanvas = evt.pageY - evt.target.offsetTop;
+        var clickYinWebGLCoords = 2.0 * (gl.drawingBufferHeight/2 - clickYrelativToCanvas) / gl.drawingBufferHeight;
+        gl.bufferData(gl.ARRAY_BUFFER,
+          new Float32Array([clickXinWebGLCoords,clickYinWebGLCoords]), gl.STATIC_DRAW);
+        gl.clearColor(0,0,0,1)
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        gl.drawArrays(gl.POINTS, 0, 1);
+     }, false);
+</script>
+</body>
+</html>

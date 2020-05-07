@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WebGL 系列教程</title>
+<script src="./static/js/showdown.min.js" charset="utf-8"></script>
+<link rel="stylesheet" href="./static/css/foundation.min.css">
+<link rel="stylesheet" href="./static/css/main.css">
+</head>
+<body>
+<div id="doc" style="width:80%" ></div>
+<script type="text/md" id="md-text">
+## 基础概念
+### WebGL 工作原理:
+通过 JS 代码来调用系统 GPU 在 canvas 中绘制相关2D/3D视图
+### 相关名词说明:
+* 顶点着色器（vertex-shader）
+每种图形都可以使用几个固定的点来描述出来，例如一个矩形只需要知道他的4个顶点就能确定这个矩形位置，大小。顶点着色器用来提供投影物体的坐标，例如要绘制一个矩形，需要提供4个顶点坐标给顶点着色器。
+
+* 片段着色器（fragment-shader）
+每次处理顶点时也同时要确定这个顶点的颜色，片段着色器用来提供这个顶点的颜色。
+
+* 着色程序
+着色程序是一个容器，他把一个顶点着色器和一个片断着色器链接在一起。
+
+* 着色器中的3类变量：
+    1. Attributes
+    这类变量在顶点着色器中使用，保存顶点信息的输入值，用来动态设置顶点坐标。
+    1. Uniforms
+    这类变量通常在两种着色器中作为全局变量使用，保存如光照位置、纹理坐标和颜色等数据。
+    1. Varyings
+    当需要在顶点着色器中传递数据给对应的片段着色器时，使用这类作为载体。
+
+### 一些总结:
+
+- WebGL 本质上是把图形像素化（光栅化）在 canvas 上，通过设置不同的纹理,颜色来显示 3D 效果。
+
+- WebGL 绘画主要需要两个信息，即***顶点坐标*** 和 ***像素颜色***。
+
+- WebGL 中的坐标系，它们的取值范围都是 （-1，1）
+    ![](./static/image/coordinate.png)
+
+- 从***顶点着色器***传值到***片断着色器***使用一个中间变量（varyings）来完成，叫“可变量”。
+
+</script>
+<script src="./static/js/init.js" charset="utf-8"></script>
+<script src="./static/js/webgl-utils.js" charset="utf-8"></script>
+</body>
+</html>

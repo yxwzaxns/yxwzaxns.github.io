@@ -1,0 +1,41 @@
+body{
+    width: 100vw;
+    /* height: 100vh; */
+    margin: 0;
+    background-color: cadetblue;
+    opacity: 0.9;
+}
+#canvas{
+    width: 800px;
+    margin: 0px auto;
+    padding-top:50px;
+}
+#canvas canvas{
+    background-color:black;
+}
+#doc{
+    width: 800px;
+    padding: 50px;
+    margin:10px auto;
+    border-radius: 5px;
+    background-color: antiquewhite;
+}
+#doc pre {
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    background-color: #000;
+    border: 1px solid #dfdfdf;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    border-radius: 5px;
+    padding: 0.125rem 0.3125rem 0.0625rem;
+}
+#doc pre code {
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    color: chartreuse;
+}
