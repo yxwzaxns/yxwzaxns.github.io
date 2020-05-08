@@ -8,6 +8,8 @@
 <script src="./static/js/showdown.min.js" charset="utf-8"></script>
 <link rel="stylesheet" href="./static/css/foundation.min.css">
 <link rel="stylesheet" href="./static/css/main.css">
+<link rel="stylesheet" href="./static/css/styles/github.css">
+<script src="./static/js/highlight.pack.js" charset="utf-8"></script>
 </head>
 <body>
 <div id="canvas">
@@ -18,6 +20,7 @@
 # 画一个点
 你没看错，这的确是个点，只是我把他的尺寸设置的很大，很明显，再次回忆像素化（光栅化）的意思，所有的画面都是由一个个的像素组成。
 
+在这个例子中，只是使用了固定的顶点着色器，没有涉及到动态的操作。
 ### 步骤：
 
 1. 首先要定义 ***顶点着色器***
@@ -48,7 +51,7 @@ void main() {
 `gl_FragColor` 也是一个系统变量，通过给它赋值来设置当前顶点的颜色。颜色使用 rgb+alpha 通道格式。
 
 3. 加载编译着色器代码
-```
+```js
 var source = document.querySelector("#vertex-shader").innerHTML;
 var vertexShader = gl.createShader(gl.VERTEX_SHADER);
 gl.shaderSource(vertexShader,source);
@@ -60,7 +63,7 @@ gl.compileShader(vertexShader);
 重复一次上面代码，加载片段着色器，只需要把常量 `gl.VERTEX_SHADER` 改为 `gl.FRAGMENT_SHADER`，指明要加载的是片段着色器。
 
 4. 创建一个着色程序，一个着色程序包含一个顶点着色器和一个片段着色器
-```
+```js
 program = gl.createProgram()
 gl.attachShader(program, vertexShader)
 gl.attachShader(program, fragmentShader)
@@ -68,11 +71,13 @@ gl.linkProgram(program)
 ```
 
 5. 加载着色程序，进行绘制
-```
+```js
 gl.useProgram(program)
 gl.drawArrays(gl.POINTS, 0, 1)
 ```
 使用 `drawArrays` 从坐标数组中获取坐标信息来绘制指定的图形，`gl.POINTS` 常量表示画点。
+
+> 为了突出学习的重点，以后的代码中将把之前介绍过的常用代码封装成函数以减少不必要的代码量。[这些函数点这里查看](./static/js/webgl-utils.js)
 
 </script>
 <script src="./static/js/init.js" charset="utf-8"></script>
@@ -91,11 +96,11 @@ void main() {
 <script type="text/javascript">
     var canvas = document.querySelector("canvas");
     var gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl")
+    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
+    gl.clearColor(1,1,1,1)
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
     function setupWebGL () {
-        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
-        gl.clearColor(1,1,1,1)
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
         //加载编译顶点着色器
         var source = document.querySelector("#vertex-shader").innerHTML;
         var vertexShader = gl.createShader(gl.VERTEX_SHADER);
@@ -108,7 +113,7 @@ void main() {
         gl.compileShader(fragmentShader);
 
         //`WebGLProgram 是 WebGL API 的一部分，它由两个WebGLShaders （webgl 着色器）组成，分别为顶点着色器和片元着色器（两种着色器都是采用 GLSL 语言编写的）。创建一个 WebGLProgram 需要调用 GL 上下文的createProgram() 方法，然后调用attachShader()方法附加上着色器，之后你才能将它们连接到一个可用的程序。`
-        program = gl.createProgram()
+        var program = gl.createProgram()
         gl.attachShader(program, vertexShader)
         gl.attachShader(program, fragmentShader)
         gl.linkProgram(program)

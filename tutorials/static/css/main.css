@@ -26,7 +26,7 @@ body{
     white-space: -pre-wrap;      /* Opera 4-6 */
     white-space: -o-pre-wrap;    /* Opera 7 */
     word-wrap: break-word;       /* Internet Explorer 5.5+ */
-    background-color: #000;
+    background-color: grey;
     border: 1px solid #dfdfdf;
     margin-top: 1.5em;
     margin-bottom: 1.5em;
@@ -36,6 +36,6 @@ body{
 #doc pre code {
     background-color: transparent;
     border: 0;
-    padding: 0;
-    color: chartreuse;
+    padding: 10px;
+    color: goldenrod;
 }

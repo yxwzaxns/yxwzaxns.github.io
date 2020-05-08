@@ -12,7 +12,23 @@
 <body>
 <div id="doc" style="width:80%"></div>
 <script type="text/md" id="md-text">
-# 模版
+# GLSL 中的相关变量类型
+
+* 矢量 vec2、vec3、vec4，具有2、3、4个浮点数元素的矢量
+
+* 矢量 ivec、ivec3、ivec4，具有2、3、4个整形数元素的矢量
+
+* 矢量 bvec、bvec3、bvec4，具有2、3、4个布尔值元素的矢量
+
+* 矩阵 mat2、mat3、mat4，2*2、3*3、4*4的浮点数元素的矩阵（分别具有4、9、16个元素）
+
+x、y、z、w/用来获取顶点坐标分量
+
+r、g、b、a/用来获取颜色分量
+
+s、t、p、q/用来获取纹理坐标分量
+
+片元着色器的float类型没有默认精度
 </script>
 <script src="./static/js/init.js" charset="utf-8"></script>
 <script src="./static/js/webgl-utils.js" charset="utf-8"></script>

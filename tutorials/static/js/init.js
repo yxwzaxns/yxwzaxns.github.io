@@ -8,4 +8,5 @@ window.addEventListener('load',()=>{
     var markdown = converter.makeHtml(text)
     // console.log(markdown);
     document.querySelector("#doc").innerHTML = markdown
+    hljs.initHighlighting()
 })
