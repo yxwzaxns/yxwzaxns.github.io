@@ -39,3 +39,23 @@ body{
     padding: 10px;
     color: goldenrod;
 }
+#head{
+    width: 800px;
+    height: 40px;
+    margin: 10px auto;
+    background-color: darkorange;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#head div{
+    padding: 6px;
+    cursor: pointer;
+    color: khaki;
+    font-size: 18px;
+}
+#head div:hover{
+    color: aliceblue;
+    font-size: 18px;
+}
