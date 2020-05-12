@@ -22,11 +22,114 @@
 </div>
 <div id="doc"></div>
 <script type="text/md" id="md-text">
-## 基
+## 关于颜色的基础使用
+在本节中，学习片段着色器的基础使用。修改上一节的代码，让点在移动中随机改变颜色。
+### 步骤
+1. 重写片段着色器
+```
+precision mediump float;
+uniform vec4 v_data;
+void main() {
+  gl_FragColor = v_data;
+}
+```
+`precision mediump float;` 用来设置片段着色器中 float 数据的精度，这个设置影响 WebGL 的性能。[点击查看更多关于 precision 的说明](precision.html)。
+> 在片段着色器中必须指定 float 类型的精度。
 
+接下来定义一个 **vec4** 类型的全局变量，在后面通过给这个变量赋值来改变对应点的颜色。
+2. 增加颜色相关操作
+```js
+var a_color_position =  gl.getUniformLocation(program, "v_data") // 查找 v_data 的引用地址
+gl.uniform4fv(a_color_position, [Math.random(), Math.random(), Math.random(), 1.0])
+```
+`uniform4fv()` 是 **gl.uniform??** 的一系列相关函数，不痛的类型的全局变量要使用对应类型的方法：
+```
+gl.uniform1f (floatUniformLoc, v);                 // float
+gl.uniform1fv(floatUniformLoc, [v]);               // float 或 float array
+gl.uniform2f (vec2UniformLoc,  v0, v1);            // vec2
+gl.uniform2fv(vec2UniformLoc,  [v0, v1]);          // vec2 或 vec2 array
+gl.uniform3f (vec3UniformLoc,  v0, v1, v2);        // vec3
+gl.uniform3fv(vec3UniformLoc,  [v0, v1, v2]);      // vec3 或 vec3 array
+gl.uniform4f (vec4UniformLoc,  v0, v1, v2, v4);    // vec4
+gl.uniform4fv(vec4UniformLoc,  [v0, v1, v2, v4]);  // vec4 或 vec4 array
+
+gl.uniformMatrix2fv(mat2UniformLoc, false, [  4x element array ])  // mat2 或 mat2 array
+gl.uniformMatrix3fv(mat3UniformLoc, false, [  9x element array ])  // mat3 或 mat3 array
+gl.uniformMatrix4fv(mat4UniformLoc, false, [ 16x element array ])  // mat4 或 mat4 array
+
+gl.uniform1i (intUniformLoc, v);                 // int
+gl.uniform1iv(intUniformLoc, [v]);                 // int 或 int array
+gl.uniform2i (ivec2UniformLoc, v0, v1);            // ivec2
+gl.uniform2iv(ivec2UniformLoc, [v0, v1]);          // ivec2 或 ivec2 array
+gl.uniform3i (ivec3UniformLoc, v0, v1, v2);        // ivec3
+gl.uniform3iv(ivec3UniformLoc, [v0, v1, v2]);      // ivec3 or ivec3 array
+gl.uniform4i (ivec4UniformLoc, v0, v1, v2, v4);    // ivec4
+gl.uniform4iv(ivec4UniformLoc, [v0, v1, v2, v4]);  // ivec4 或 ivec4 array
+```
+
+在这里我们给它一个随机数生成的颜色，以上。
 </script>
 <script src="./static/js/init.js" charset="utf-8"></script>
 <script src="./static/js/webgl-utils.js" charset="utf-8"></script>
 <!-- WebGL code start -->
+<script type="x-shader/x-vertex" id="vertex-shader">
+attribute vec2 xy_position;
+void main() {
+  gl_Position = vec4(xy_position, 0.0, 1.0);
+  gl_PointSize = 64.0;
+}
+</script>
+<script type="x-shader/x-fragment" id="fragment-shader">
+precision mediump float;
+uniform vec4 v_data;
+void main() {
+  gl_FragColor = v_data;
+}
+</script>
+<script type="text/javascript">
+    initWebGL('canvas')
+    setupWebGL()
+    function setupWebGL () {
+        //加载编译顶点着色器
+        var source = document.querySelector("#vertex-shader").innerHTML;
+        var vertexShader = createShader(gl,gl.VERTEX_SHADER,source)
+        //加载编译片段着色器
+        source = document.querySelector("#fragment-shader").innerHTML
+        var fragmentShader = createShader(gl,gl.FRAGMENT_SHADER,source)
+
+        program = createProgram(gl,vertexShader,fragmentShader)
+
+        initializeAttributes(program)
+        gl.useProgram(program)
+        gl.drawArrays(gl.POINTS, 0, 1)
+    }
+    function initializeAttributes(program) {
+        buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        var seed = new Float32Array([0.0,0.0])
+        gl.bufferData(gl.ARRAY_BUFFER, seed, gl.STATIC_DRAW)
+
+        var xy_position = gl.getAttribLocation(program,'xy_position')
+
+        gl.vertexAttribPointer(xy_position, 2, gl.FLOAT, false, 0, 0)
+        gl.enableVertexAttribArray(xy_position)
+    }
+
+    document.querySelector("canvas").addEventListener("mousemove",
+      function (evt) {
+        var clickXrelativToCanvas = evt.pageX - evt.target.offsetLeft;
+        var clickXinWebGLCoords = 2.0 * (clickXrelativToCanvas - gl.drawingBufferWidth/2) / gl.drawingBufferWidth;
+        var clickYrelativToCanvas = evt.pageY - evt.target.offsetTop;
+        var clickYinWebGLCoords = 2.0 * (clickYrelativToCanvas - gl.drawingBufferHeight/2) / gl.drawingBufferHeight;
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([clickXinWebGLCoords,-clickYinWebGLCoords]), gl.STATIC_DRAW);
+
+        var a_color_position =  gl.getUniformLocation(program, "v_data")
+        gl.uniform4fv(a_color_position, [Math.random(), Math.random(), Math.random(), 1.0])
+
+        gl.clearColor(1,1,1,1)
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        gl.drawArrays(gl.POINTS, 0, 1);
+    })
+</script>
 </body>
 </html>

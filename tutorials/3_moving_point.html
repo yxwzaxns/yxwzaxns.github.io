@@ -95,7 +95,7 @@ void main() {
         source = document.querySelector("#fragment-shader").innerHTML
         var fragmentShader = createShader(gl,gl.FRAGMENT_SHADER,source)
 
-        var program = createProgram(gl,vertexShader,fragmentShader)
+        program = createProgram(gl,vertexShader,fragmentShader)
 
         initializeAttributes(program)
         gl.useProgram(program)

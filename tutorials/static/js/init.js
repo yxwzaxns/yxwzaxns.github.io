@@ -20,9 +20,10 @@ function createElementFromHTML(htmlString) {
 }
 
 function createNav(){
-    let no = new RegExp(/(\d+)_.*\.html/).exec(location.pathname)?.[1]
-    if(no==undefined) return
-    no = parseInt(no)
+    const urlInfo = new RegExp(/s\/(\d*)_*(.*)\.html/).exec(location.pathname) || []
+    let no = urlInfo[1] || -1
+    const title = urlInfo[2]
+    if(title==undefined) return
     const doc = document.querySelector("#doc")
 
     const p = `<div id="head" style="width:${doc.style.width}">
@@ -48,6 +49,10 @@ function createNav(){
         }else{
             document.querySelector("#head .next div").innerHTML = "待更新"
         }
+    }else{
+        document.querySelector("#head .back").href = "javascript:history.go(-1)"
+        document.querySelector("#head .back div").innerHTML = "返回"
+        document.querySelector("#head .next div").innerHTML = ""
     }
     window.addEventListener('scroll', function(e) {
         const toBottomHeight = e.target.scrollingElement.scrollHeight - e.target.scrollingElement.scrollTop - window.innerHeight

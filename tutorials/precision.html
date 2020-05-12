@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WebGL 系列教程</title>
+<meta name="keywords" content="webgl,glsl,canvas,precision">
+<script src="./static/js/showdown.min.js" charset="utf-8"></script>
+<!-- 代码高亮插件 -->
+<script src="./static/js/highlight.pack.js" charset="utf-8"></script>
+<link rel="stylesheet" href="./static/css/styles/github.css">
+
+<link rel="stylesheet" href="./static/css/foundation.css">
+<link rel="stylesheet" href="./static/css/main.css">
+</head>
+<body>
+<div id="doc" style="width:80%"></div>
+<script type="text/md" id="md-text">
+## 片段着色器的 precision
+在片段着色器中没有默认的精度，需要设置下面这行代码：
+```
+precision mediump float;
+```
+目前有三个精度值可以使用：**lowp**,**mediump**,**highp**，越高的精度下 float 类型能储存的精度值越大，内容效果越好，所以正常来说使用 **highp** 就好了，但是不同的设备对精度的支持情况不一样，在不支持高精度的设备上使用 **highp** 则会出现不可预料的后果。
+
+### 解决方案
+1. 使用回退代码
+```
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+  precision highp float;
+#else
+  precision mediump float;
+#endif
+```
+这个代码很容易理解，在着色器编译的时候会自己判断，先尝试使用 **highp**，如果设备不支持则回退到 **mediump**。
+> 现在主流的设备应该都支持 **mediump**。
+
+
+2. 在仅支持 **mediump** 的设备上限制高精度操作，同样是使用 ***GL_FRAGMENT_PRECISION_HIGH*** 常量在做判断，进行动态编译。
+```
+// 普通操作
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+  // 高精度操作，如进行点光源渲染
+#endif
+```
+
+#### 检测设备支持的精度
+1. 调用 `getShaderPrecisionFormat` 方法
+1. 创建一个指定精度的片段着色器，编译，链接后检查返回信息，如果返回有错误则说明不支持设置的精度。
+
+#### 设置不同的精度
+除了指定默认的精度，还可以给任何单个变量指定不同的精度：
+```
+uniform mediump vec4 color;  // a uniform
+attribute lowp vec4 normal;  // an attribute
+varying lowp vec4 texcoord;  // a varying
+lowp float foo;              // a variable
+```
+</script>
+<script src="./static/js/init.js" charset="utf-8"></script>
+<script src="./static/js/webgl-utils.js" charset="utf-8"></script>
+<!-- WebGL code start -->
+</body>
+</html>
