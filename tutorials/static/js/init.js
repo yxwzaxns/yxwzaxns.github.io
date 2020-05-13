@@ -1,4 +1,4 @@
-const pages = ['start','init','point','moving_point','color']
+const pages = ['start','init','point','moving_point','color','animation']
 window.addEventListener('load',()=>{
     showdown.setFlavor('github')
     showdown.setOption('ghMentions',true)
@@ -21,7 +21,7 @@ function createElementFromHTML(htmlString) {
 
 function createNav(){
     const urlInfo = new RegExp(/s\/(\d*)_*(.*)\.html/).exec(location.pathname) || []
-    let no = urlInfo[1] || -1
+    let no = parseInt(urlInfo[1] || -1)
     const title = urlInfo[2]
     if(title==undefined) return
     const doc = document.querySelector("#doc")

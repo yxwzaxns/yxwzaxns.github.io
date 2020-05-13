@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WebGL 系列教程</title>
+<meta name="keywords" content="webgl,glsl,canvas,animation">
+<script src="./static/js/showdown.min.js" charset="utf-8"></script>
+<!-- 代码高亮插件 -->
+<script src="./static/js/highlight.pack.js" charset="utf-8"></script>
+<link rel="stylesheet" href="./static/css/styles/github.css">
+
+<link rel="stylesheet" href="./static/css/foundation.css">
+<link rel="stylesheet" href="./static/css/main.css">
+</head>
+<body>
+<div id="canvas"><canvas  width="800" height="600"></canvas></div>
+<div id="doc"></div>
+<script type="text/md" id="md-text">
+## 动画的本质是连续的图片
+最简单的实现是使用 `setInterval` 来定时的更新画面，而比较专业的做法是使用浏览器提供的专用 API 接口，例如 Chrome 浏览器的 `requestAnimationFrame`。
+### 步骤
+1. 修改点的运动逻辑
+```
+const render = function(){
+    if(1.0-x<0){
+        x = - 1.0
+    }else{
+        x += 0.01
+    }
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([x,0.0]), gl.STATIC_DRAW);
+    gl.drawArrays(gl.POINTS, 0, 1)
+    window.requestAnimationFrame(render)
+}
+```
+定义了点在 X 上移动的运动轨迹，并循环这个过程。
+2. 注入动画的灵魂
+```
+window.requestAnimationFrame(render)
+```
+`requestAnimationFrame` 绑定一个方法，触发事件为浏览器下一次内容重绘时，通常为一分钟执行 60 次。他的性能比使用 `setInterval` 有很大的提升，而且当浏览器在后台运行或者因为其他原因使得当前画面不可见时，它会自动暂停以减少资源消耗。
+</script>
+<script src="./static/js/init.js" charset="utf-8"></script>
+<script src="./static/js/webgl-utils.js" charset="utf-8"></script>
+<!-- WebGL code start -->
+<script type="x-shader/x-vertex" id="vertex-shader">
+attribute vec2 xy_position;
+void main() {
+  gl_Position = vec4(xy_position, 0.0, 1.0);
+  gl_PointSize = 64.0;
+}
+</script>
+<script type="x-shader/x-fragment" id="fragment-shader">
+void main() {
+  gl_FragColor = vec4(0.18, 0.54, 0.34, 1.0);
+}
+</script>
+<script type="text/javascript">
+    initWebGL('canvas')
+    setupWebGL()
+    function setupWebGL () {
+        //加载编译顶点着色器
+        var source = document.querySelector("#vertex-shader").innerHTML;
+        var vertexShader = createShader(gl,gl.VERTEX_SHADER,source)
+        //加载编译片段着色器
+        source = document.querySelector("#fragment-shader").innerHTML
+        var fragmentShader = createShader(gl,gl.FRAGMENT_SHADER,source)
+
+        program = createProgram(gl,vertexShader,fragmentShader)
+
+        initializeAttributes(program)
+        gl.useProgram(program)
+        startAnimation()
+    }
+    function initializeAttributes(program) {
+        buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        var seed = new Float32Array([-1.0,0.0])
+        gl.bufferData(gl.ARRAY_BUFFER, seed, gl.STATIC_DRAW)
+        var xy_position = gl.getAttribLocation(program,'xy_position')
+        gl.vertexAttribPointer(xy_position, 2, gl.FLOAT, false, 0, 0)
+        gl.enableVertexAttribArray(xy_position)
+    }
+
+    function startAnimation(){
+        let x = -1.0
+        const render = function(){
+            if(1.0-x<0){
+                x = - 1.0
+            }else{
+                x += 0.01
+            }
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([x,0.0]), gl.STATIC_DRAW);
+            gl.drawArrays(gl.POINTS, 0, 1)
+            window.requestAnimationFrame(render)
+        }
+        window.requestAnimationFrame(render)
+    }
+</script>
+</body>
+</html>
