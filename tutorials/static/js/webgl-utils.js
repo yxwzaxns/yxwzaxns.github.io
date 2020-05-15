@@ -43,3 +43,19 @@ function createAnimotion(render){
     w['r'+r] = w['r'+r] || w['webkitR'+r] || w['mozR'+r] || w['msR'+r] || w['oR'+r] || function(c){ w.setTimeout(c, 1000 / 60); }
     render()
 }
+
+function getCircle([x,y],r,n=100){
+    const vectors = [x,y]
+    for (let i = 0; i <= n; i++) {
+        // vectors.push(
+        //     r*Math.cos(i*2*Math.PI/n) + x,
+        //     r*Math.sin(i*2*Math.PI/n) + y
+        // )
+
+        const theta = i * 2 * Math.PI / n
+        const x1 = r * Math.sin(theta)
+        const y1 = r * Math.cos(theta)
+        vectors.push(x1+x, y1+y)
+    }
+    return vectors
+}

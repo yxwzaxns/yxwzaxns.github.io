@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WebGL 系列教程</title>
+<meta name="keywords" content="webgl,glsl,canvas">
+<script src="./static/js/gl-matrix-min.js"></script>
+<script src="./static/js/showdown.min.js" charset="utf-8"></script>
+<!-- 代码高亮插件 -->
+<script src="./static/js/highlight.pack.js" charset="utf-8"></script>
+<link rel="stylesheet" href="./static/css/styles/github.css">
+
+<link rel="stylesheet" href="./static/css/foundation.css">
+<link rel="stylesheet" href="./static/css/main.css">
+</head>
+<body>
+<div id="canvas"><canvas  width="800" height="800"></canvas></div>
+<div id="doc"></div>
+<script type="text/md" id="md-text">
+### 图形变换
+</script>
+<script src="./static/js/init.js" charset="utf-8"></script>
+<script src="./static/js/webgl-utils.js" charset="utf-8"></script>
+<!-- WebGL code start -->
+<!-- WebGL code start -->
+<script type="x-shader/x-vertex" id="vertex-shader">
+attribute vec2 xy_position;
+uniform mat4 transformation;
+void main() {
+  gl_Position = transformation * vec4(xy_position, 0.0, 1.0);
+}
+</script>
+<script type="x-shader/x-fragment" id="fragment-shader">
+precision mediump float;
+uniform vec4 v_color;
+void main() {
+  gl_FragColor = v_color;
+}
+</script>
+<script type="text/javascript">
+    let v_color_position
+    initWebGL('canvas')
+    setupWebGL()
+    startDraw()
+    function setupWebGL () {
+        //加载编译顶点着色器
+        var source = document.querySelector("#vertex-shader").innerHTML;
+        var vertexShader = createShader(gl,gl.VERTEX_SHADER,source)
+        //加载编译片段着色器
+        source = document.querySelector("#fragment-shader").innerHTML
+        var fragmentShader = createShader(gl,gl.FRAGMENT_SHADER,source)
+
+        program = createProgram(gl,vertexShader,fragmentShader)
+
+        initialize(program)
+        gl.useProgram(program)
+    }
+    function initialize(program) {
+        gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer())
+
+        var xy_position = gl.getAttribLocation(program,'xy_position')
+        gl.vertexAttribPointer(xy_position, 2, gl.FLOAT, false, 0, 0)
+        gl.enableVertexAttribArray(xy_position)
+
+        v_color_position =  gl.getUniformLocation(program, "v_color")
+    }
+
+    function startDraw(){
+        // gl.POINTS, gl.LINE_STRIP, gl.LINE_LOOP, gl.LINES, gl.TRIANGLE_STRIP, gl.TRIANGLE_FAN, and gl.TRIANGLES
+        // let vectors = getCircle([0,0],0.5)
+        // changeColor()
+        // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vectors), gl.STATIC_DRAW)
+
+        vectors = [-0.3,-0.3,-0.8,-0.3,-0.8,-0.8,-0.3,-0.8]
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vectors), gl.STATIC_DRAW)
+
+
+        const u_transformation = gl.getUniformLocation(program, "transformation")
+
+        var modelView = glMatrix.mat4.create();
+
+        // glMatrix.mat4.scale(modelView, modelView, glMatrix.vec3.fromValues(0.8, 1, 1)) // 伸缩
+        // glMatrix.mat4.translate(modelView, modelView, glMatrix.vec3.fromValues(0,-0.3,0))
+        // glMatrix.mat4.perspective(modelView, Math.PI/3, 2, 0.1, 100);
+        // glMatrix.mat4.rotateX(modelView, modelView, 0.01);
+        glMatrix.mat4.rotateZ(modelView, modelView, Math.PI/3);
+        gl.uniformMatrix4fv(u_transformation, false, modelView)
+
+        gl.drawArrays(gl.LINE_LOOP, 0, 4)
+        // gl.drawArrays(gl.TRIANGLE_FAN, 0, vectors.length / 2)
+    }
+    function changeColor(){
+        gl.uniform4fv(v_color_position, [Math.random(), Math.random(), Math.random(), 1.0])
+    }
+</script>
+</body>
+</html>

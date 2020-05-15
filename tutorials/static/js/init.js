@@ -1,4 +1,4 @@
-const pages = ['start','init','point','moving_point','color','animation','simple_polygon','two_ways_of_drawing']
+const pages = ['start','init','point','moving_point','color','animation','simple_polygon','two_ways_of_drawing','translation']
 window.addEventListener('load',()=>{
     showdown.setFlavor('github')
     showdown.setOption('ghMentions',true)
