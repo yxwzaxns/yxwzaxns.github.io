@@ -59,3 +59,7 @@ function getCircle([x,y],r,n=100){
     }
     return vectors
 }
+function clearBg(gl,c){
+  gl.clearColor(...c)
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+}

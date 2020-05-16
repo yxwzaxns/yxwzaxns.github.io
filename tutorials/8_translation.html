@@ -16,10 +16,57 @@
 <link rel="stylesheet" href="./static/css/main.css">
 </head>
 <body>
-<div id="canvas"><canvas  width="800" height="800"></canvas></div>
+<div id="canvas"><canvas  width="800" height="600"></canvas></div>
 <div id="doc"></div>
 <script type="text/md" id="md-text">
 ### 图形变换
+进行图像绘制时常常需要对其进行许多变换操作，例如：旋转，平移，伸缩等。在进行基本图形的变换时可以手动对坐标进行计算，但是对于复杂的图形变换，手工计算则不太现实。
+
+图形变换通常使用到矩阵运算，这里涉及到了线性代数相关的知识，这里不做具体介绍，而是直接使用现有的矩阵变换库来做图形变换。
+> 这里使用的矩阵变换库是：[glMatrix](https://github.com/toji/gl-matrix)
+
+#### 步骤
+1. 添加 glMatrix 库：
+
+```
+<script src="./static/js/gl-matrix-min.js"><\/script>
+```
+
+2. 修改顶点着色器：
+```
+attribute vec2 xy_position;
+uniform mat4 transformation;
+void main() {
+  gl_Position = transformation * vec4(xy_position, 0.0, 1.0);
+}
+```
+
+增加一个 **mat4** 类型变量来和坐标做点乘，`transformation` 用来存变换操作计算出的值。
+3. 增加变换操作：
+```
+let vectors = getCircle([0,0],0.5)
+const u_transformation = gl.getUniformLocation(program, "transformation")
+let transformation = mat4.create()
+let i = 0
+changeColor()
+function render() {                
+    i++
+    mat4.identity(transformation)
+    mat4.rotateX(transformation, transformation, Math.PI/3*i%6) // 旋转
+    mat4.rotateY(transformation, transformation, Math.PI/3*i%6) // 旋转
+    mat4.translate(transformation, transformation, [0.1*(i%2==0?-1:1)*(i%10), 0.1*(i%2==0?1:-1)*(i%10), 0]) // 平移
+    mat4.scale(transformation, transformation, glMatrix.vec3.fromValues(0.1*(i%10), 0.1*(i%10), 1)) // 伸缩
+    
+    gl.uniformMatrix4fv(u_transformation, false, transformation)
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vectors), gl.STATIC_DRAW)
+    clearBg(gl,[0,0,0,1])
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, vectors.length / 2)
+    requestAnimationFrame(render)          
+}
+createAnimotion(render)
+```
+创建 **mat4** 类型的 `transformation` 变量，依次调用 `rotateX`，`translate`，`scale` 后计算出 `transformation`，然后用 `uniformMatrix4fv`设置到顶点着色器中。
+
 </script>
 <script src="./static/js/init.js" charset="utf-8"></script>
 <script src="./static/js/webgl-utils.js" charset="utf-8"></script>
@@ -40,6 +87,7 @@ void main() {
 }
 </script>
 <script type="text/javascript">
+    window.mat4 = glMatrix.mat4
     let v_color_position
     initWebGL('canvas')
     setupWebGL()
@@ -68,28 +116,26 @@ void main() {
     }
 
     function startDraw(){
-        // gl.POINTS, gl.LINE_STRIP, gl.LINE_LOOP, gl.LINES, gl.TRIANGLE_STRIP, gl.TRIANGLE_FAN, and gl.TRIANGLES
-        // let vectors = getCircle([0,0],0.5)
-        // changeColor()
-        // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vectors), gl.STATIC_DRAW)
-
-        vectors = [-0.3,-0.3,-0.8,-0.3,-0.8,-0.8,-0.3,-0.8]
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vectors), gl.STATIC_DRAW)
-
-
+        let vectors = getCircle([0,0],0.5)
         const u_transformation = gl.getUniformLocation(program, "transformation")
-
-        var modelView = glMatrix.mat4.create();
-
-        // glMatrix.mat4.scale(modelView, modelView, glMatrix.vec3.fromValues(0.8, 1, 1)) // 伸缩
-        // glMatrix.mat4.translate(modelView, modelView, glMatrix.vec3.fromValues(0,-0.3,0))
-        // glMatrix.mat4.perspective(modelView, Math.PI/3, 2, 0.1, 100);
-        // glMatrix.mat4.rotateX(modelView, modelView, 0.01);
-        glMatrix.mat4.rotateZ(modelView, modelView, Math.PI/3);
-        gl.uniformMatrix4fv(u_transformation, false, modelView)
-
-        gl.drawArrays(gl.LINE_LOOP, 0, 4)
-        // gl.drawArrays(gl.TRIANGLE_FAN, 0, vectors.length / 2)
+        let transformation = mat4.create()
+        let i = 0
+        changeColor()
+        function render() {                
+            i++
+            mat4.identity(transformation)
+            mat4.rotateX(transformation, transformation, Math.PI/3*i%6) // 旋转
+            mat4.rotateY(transformation, transformation, Math.PI/3*i%6) // 旋转
+            mat4.translate(transformation, transformation, [0.1*(i%2==0?-1:1)*(i%10), 0.1*(i%2==0?1:-1)*(i%10), 0]) // 平移
+            mat4.scale(transformation, transformation, glMatrix.vec3.fromValues(0.1*(i%10), 0.1*(i%10), 1)) // 伸缩
+            
+            gl.uniformMatrix4fv(u_transformation, false, transformation)
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vectors), gl.STATIC_DRAW)
+            clearBg(gl,[0,0,0,1])
+            gl.drawArrays(gl.TRIANGLE_FAN, 0, vectors.length / 2)
+            requestAnimationFrame(render)          
+        }
+        createAnimotion(render)
     }
     function changeColor(){
         gl.uniform4fv(v_color_position, [Math.random(), Math.random(), Math.random(), 1.0])
