@@ -16,23 +16,55 @@
 <body>
 <div id="doc" style="width:80%"></div>
 <script type="text/md" id="md-text">
-# GLSL 中的相关变量类型
+### GLSL 中的相关变量类型
+除了常用的 void，bool，int, float 等类型外，还有以下类型被使用
 
-* 矢量 vec2、vec3、vec4，具有2、3、4个浮点数元素的矢量
+1. 顶点类型
+    * 矢量 vec2、vec3、vec4，具有2、3、4个浮点数元素的矢量，分别代表两个值，三个值和四个值
 
-* 矢量 ivec、ivec3、ivec4，具有2、3、4个整形数元素的矢量
+    * 矢量 ivec、ivec3、ivec4，具有2、3、4个整形数元素的矢量
 
-* 矢量 bvec、bvec3、bvec4，具有2、3、4个布尔值元素的矢量
+    * 矢量 bvec、bvec3、bvec4，具有2、3、4个布尔值元素的矢量
 
-* 矩阵 mat2、mat3、mat4，2*2、3*3、4*4的浮点数元素的矩阵（分别具有4、9、16个元素）
+    * bvec2, bvec3, bvec4 
 
-x、y、z、w/用来获取顶点坐标分量
+矢量的各个分量在不同语境下可以单独表示出来：
 
-r、g、b、a/用来获取颜色分量
+```
+vec4 v;
+v.x, v.y, v.z, v.w // x、y、z、w 用来获取顶点坐标分量
+v.r, v.g, v.b, v.a // r、g、b、a 用来获取颜色分量
+v.s, v.t, v.p, v.q // s、t、p、q 用来获取纹理坐标分量
+v[0],v[1],v[2],v[3] // 当然还可以用下标的方式来引用分量
+```
 
-s、t、p、q/用来获取纹理坐标分量
+它还支持矢量调制，意味者你可以交换或重复分量:
 
-片元着色器的float类型没有默认精度
+```
+vec4 v;
+v.xxxx == vec4(v.x,v.x,v.x,v.x)
+v.ragb == vec4(v.r,v.a,v.g,v.b)
+```
+
+其他使用事项：
+```
+vec4(v.r,v.g,v.b,v.a) == vec4(v.rgb,v.a)
+vec4(1) == vec4(1,1,1,1)
+```
+
+> vec4(1) 不会因为 1 报错，因为 vec4 内部进行了转换类似 float(1)
+
+2. 矩阵类型
+
+* 矩阵 mat2、mat3、mat4 分别代表 2\*2，3\*3，4\*4 的浮点数元素的矩阵（分别具有4、9、16个元素）
+
+3. 纹理操作相关
+ 
+* sampler2D 取样器类型变量
+
+* samplerCube
+
+
 </script>
 <script src="./static/js/init.js" charset="utf-8"></script>
 <script src="./static/js/webgl-utils.js" charset="utf-8"></script>
