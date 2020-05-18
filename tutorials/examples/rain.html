@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WebGL 系列教程</title>
+<meta name="keywords" content="webgl,glsl,canvas">
+<script src="../static/js/gl-matrix-min.js"></script>
+<script src="../static/js/showdown.min.js" charset="utf-8"></script>
+<!-- 代码高亮插件 -->
+<script src="../static/js/highlight.pack.js" charset="utf-8"></script>
+<link rel="stylesheet" href="../static/css/styles/github.css">
+
+<link rel="stylesheet" href="../static/css/foundation.css">
+<link rel="stylesheet" href="../static/css/main.css">
+</head>
+<body>
+<div id="canvas"><canvas  width="800" height="600"></canvas></div>
+<div id="doc"></div>
+<script type="text/md" id="md-text">
+### 下雨的效果
+</script>
+<script src="../static/js/init.js" charset="utf-8"></script>
+<script src="../static/js/webgl-utils.js" charset="utf-8"></script>
+<!-- WebGL code start -->
+<script type="x-shader/x-vertex" id="vertex-shader">
+attribute float vertexId;
+uniform float numVerts;
+uniform float time;
+
+float hash(float p) {
+  vec2 p2 = fract(vec2(p * 5.3983, p * 5.4427));
+  p2 += dot(p2.yx, p2.xy + vec2(21.5351, 14.3137));
+  return fract(p2.x * p2.y * 95.4337);
+}
+
+void main() {
+  float u = vertexId / numVerts;          // goes from 0 to 1
+  float off = floor(time + u) / 1000.0;   // changes once per second per vertex
+  float x = hash(u + off) * 2.0 - 1.0;    // random position
+  float y = fract(time + u) * -2.0 + 1.0; // 1.0 ->  -1.0
+
+  gl_Position = vec4(x, y, 0, 1);
+  gl_PointSize = 2.0;
+}
+</script>
+<script type="x-shader/x-fragment" id="fragment-shader">
+precision mediump float;
+
+void main() {
+  gl_FragColor = vec4(0, 0, 1, 1);
+}
+</script>
+<script type="text/javascript">
+    window.mat4 = glMatrix.mat4
+    let v_color_position
+    initWebGL('canvas')
+    setupWebGL()
+    function setupWebGL () {
+        //加载编译顶点着色器
+        var source = document.querySelector("#vertex-shader").innerHTML;
+        var vertexShader = createShader(gl,gl.VERTEX_SHADER,source)
+        //加载编译片段着色器
+        source = document.querySelector("#fragment-shader").innerHTML
+        var fragmentShader = createShader(gl,gl.FRAGMENT_SHADER,source)
+        program = createProgram(gl,vertexShader,fragmentShader)
+        initialize(program)
+        gl.useProgram(program)
+    }
+    function initialize(program) {
+        const vertexIdLoc = gl.getAttribLocation(program, 'vertexId');
+        const numVertsLoc = gl.getUniformLocation(program, 'numVerts');
+        const timeLoc = gl.getUniformLocation(program, 'time');
+
+        // Make a buffer with just a count in it.
+
+        const numVerts = 400;
+        const vertexIds = new Float32Array(numVerts);
+        vertexIds.forEach((v, i) => {
+          vertexIds[i] = i;
+        });
+
+        const idBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, idBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, vertexIds, gl.STATIC_DRAW);
+
+        // draw
+        function render(time) {
+          time *= 0.001;  // convert to seconds
+          gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
+          gl.useProgram(program);
+          {
+            // Turn on the attribute
+            gl.enableVertexAttribArray(vertexIdLoc);
+
+            // Bind the id buffer.
+            gl.bindBuffer(gl.ARRAY_BUFFER, idBuffer);
+
+            // Tell the attribute how to get data out of idBuffer (ARRAY_BUFFER)
+            const size = 1;          // 1 components per iteration
+            const type = gl.FLOAT;   // the data is 32bit floats
+            const normalize = false; // don't normalize the data
+            const stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+            const offset = 0;        // start at the beginning of the buffer
+            gl.vertexAttribPointer(vertexIdLoc, size, type, normalize, stride, offset);
+          }
+
+          // tell the shader the number of verts
+          gl.uniform1f(numVertsLoc, numVerts);
+          // tell the shader the time
+          gl.uniform1f(timeLoc, time);
+
+          const offset = 0;
+          gl.drawArrays(gl.POINTS, offset, numVerts);
+
+          requestAnimationFrame(render);
+        }
+        render()
+    }
+</script>
+</body>
+</html>
