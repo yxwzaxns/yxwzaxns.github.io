@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WebGL 系列教程</title>
+<meta name="keywords" content="webgl,glsl,canvas">
+<script src="./static/js/gl-matrix-min.js"></script>
+<script src="./static/js/showdown.min.js" charset="utf-8"></script>
+<!-- 代码高亮插件 -->
+<script src="./static/js/highlight.pack.js" charset="utf-8"></script>
+<link rel="stylesheet" href="./static/css/styles/github.css">
+
+<link rel="stylesheet" href="./static/css/foundation.css">
+<link rel="stylesheet" href="./static/css/main.css">
+</head>
+<body>
+<div id="canvas"><canvas  width="800" height="600"></canvas></div>
+<div id="doc"></div>
+<script type="text/md" id="md-text">
+### 变形的图像
+在前面的教程中，可能有人会发现一个问题，明明画的是圆，但是显示出来的图像却是个椭圆。这是因为像素空间与裁剪空间坐标不一致导致的。因为裁剪空间的坐标范围规定是（-1，1），但是 canvas 自身的长宽比不是1比1（800x600），导致了 x 轴方向的坐标都被压缩了，所以画出的圆变成了椭圆（不只是圆，其他图像也会出现这个现象，圆的图像比较明显）。
+
+#### 解决办法
+1. 修改顶点着色器
+```
+attribute vec2 xy_position;
+uniform vec2 resolution;
+void main() {
+    float aspect = resolution.y / resolution.x;
+    vec2 scale = vec2(aspect, 1);
+    gl_Position = vec4(xy_position * scale, 0, 1);
+}
+```
+
+    增加一个全局变量用来接收 x/y 的横纵比，然后转变成 vec2 与顶点坐标做点乘。
+
+2. 在绘制图形时设置 **resolution** 的值为 **gl.canvas** 的长和宽。
+```
+const u_resolution = gl.getUniformLocation(program, "resolution")
+gl.uniform2f(u_resolution, gl.canvas.width, gl.canvas.height)
+```
+
+</script>
+<script src="./static/js/init.js" charset="utf-8"></script>
+<script src="./static/js/webgl-utils.js" charset="utf-8"></script>
+<!-- WebGL code start -->
+<script type="x-shader/x-vertex" id="vertex-shader">
+attribute vec2 xy_position;
+uniform vec2 resolution;
+void main() {
+    float aspect = resolution.y / resolution.x;
+    vec2 scale = vec2(aspect, 1);
+    gl_Position = vec4(xy_position * scale, 0, 1);
+}
+</script>
+<script type="x-shader/x-fragment" id="fragment-shader">
+precision mediump float;
+uniform vec4 v_color;
+void main() {
+  gl_FragColor = v_color;
+}
+</script>
+<script type="text/javascript">
+    window.mat4 = glMatrix.mat4
+    let v_color_position
+    initWebGL('canvas')
+    setupWebGL()
+    startDraw()
+    function setupWebGL () {
+        //加载编译顶点着色器
+        var source = document.querySelector("#vertex-shader").innerHTML;
+        var vertexShader = createShader(gl,gl.VERTEX_SHADER,source)
+        //加载编译片段着色器
+        source = document.querySelector("#fragment-shader").innerHTML
+        var fragmentShader = createShader(gl,gl.FRAGMENT_SHADER,source)
+        program = createProgram(gl,vertexShader,fragmentShader)
+        initialize(program)
+        gl.useProgram(program)
+    }
+    function initialize(program) {
+        gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer())
+        var xy_position = gl.getAttribLocation(program,'xy_position')
+        gl.vertexAttribPointer(xy_position, 2, gl.FLOAT, false, 0, 0)
+        gl.enableVertexAttribArray(xy_position)
+        v_color_position =  gl.getUniformLocation(program, "v_color")
+    }
+    function startDraw(){
+        let vectors = getCircle([0,0],0.5)
+        const u_resolution = gl.getUniformLocation(program, "resolution")
+
+        changeColor()
+        let i = 0
+        const gap = gl.canvas.width - gl.canvas.height
+        function render(){
+            i += 1
+            gl.uniform2f(u_resolution, gl.canvas.height+ (i>=gap?gap:i), gl.canvas.height)
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vectors), gl.STATIC_DRAW)
+            clearBg(gl,[0,0,0,1])
+            gl.drawArrays(gl.TRIANGLE_FAN, 0, vectors.length / 2)
+            requestAnimationFrame(render)
+        }
+        render()
+    }
+    function changeColor(){
+        gl.uniform4fv(v_color_position, [Math.random(), Math.random(), Math.random(), 1.0])
+    }
+</script>
+</body>
+</html>

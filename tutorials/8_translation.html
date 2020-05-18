@@ -49,19 +49,19 @@ const u_transformation = gl.getUniformLocation(program, "transformation")
 let transformation = mat4.create()
 let i = 0
 changeColor()
-function render() {                
+function render() {
     i++
     mat4.identity(transformation)
     mat4.rotateX(transformation, transformation, Math.PI/3*i%6) // 旋转
     mat4.rotateY(transformation, transformation, Math.PI/3*i%6) // 旋转
     mat4.translate(transformation, transformation, [0.1*(i%2==0?-1:1)*(i%10), 0.1*(i%2==0?1:-1)*(i%10), 0]) // 平移
     mat4.scale(transformation, transformation, glMatrix.vec3.fromValues(0.1*(i%10), 0.1*(i%10), 1)) // 伸缩
-    
+
     gl.uniformMatrix4fv(u_transformation, false, transformation)
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vectors), gl.STATIC_DRAW)
     clearBg(gl,[0,0,0,1])
     gl.drawArrays(gl.TRIANGLE_FAN, 0, vectors.length / 2)
-    requestAnimationFrame(render)          
+    requestAnimationFrame(render)
 }
 createAnimotion(render)
 ```
@@ -70,7 +70,6 @@ createAnimotion(render)
 </script>
 <script src="./static/js/init.js" charset="utf-8"></script>
 <script src="./static/js/webgl-utils.js" charset="utf-8"></script>
-<!-- WebGL code start -->
 <!-- WebGL code start -->
 <script type="x-shader/x-vertex" id="vertex-shader">
 attribute vec2 xy_position;
@@ -116,26 +115,26 @@ void main() {
     }
 
     function startDraw(){
-        let vectors = getCircle([0,0],0.5)
+        let vectors = getCircle([-0.3,0.3],0.3)
         const u_transformation = gl.getUniformLocation(program, "transformation")
         let transformation = mat4.create()
         let i = 0
         changeColor()
-        function render() {                
-            i++
+        function render() {
+            i += 0.005
             mat4.identity(transformation)
-            mat4.rotateX(transformation, transformation, Math.PI/3*i%6) // 旋转
-            mat4.rotateY(transformation, transformation, Math.PI/3*i%6) // 旋转
+            mat4.rotateX(transformation, transformation, Math.PI/3*i%12) // 旋转
+            mat4.rotateY(transformation, transformation, Math.PI/3*i%12) // 旋转
             mat4.translate(transformation, transformation, [0.1*(i%2==0?-1:1)*(i%10), 0.1*(i%2==0?1:-1)*(i%10), 0]) // 平移
-            mat4.scale(transformation, transformation, glMatrix.vec3.fromValues(0.1*(i%10), 0.1*(i%10), 1)) // 伸缩
-            
+            mat4.scale(transformation, transformation, glMatrix.vec3.fromValues(0.1*(i%15), 0.1*(i%15), 1)) // 伸缩
+
             gl.uniformMatrix4fv(u_transformation, false, transformation)
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vectors), gl.STATIC_DRAW)
             clearBg(gl,[0,0,0,1])
             gl.drawArrays(gl.TRIANGLE_FAN, 0, vectors.length / 2)
-            requestAnimationFrame(render)          
+            requestAnimationFrame(render)
         }
-        createAnimotion(render)
+        render()
     }
     function changeColor(){
         gl.uniform4fv(v_color_position, [Math.random(), Math.random(), Math.random(), 1.0])
