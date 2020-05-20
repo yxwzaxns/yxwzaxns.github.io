@@ -15,9 +15,39 @@
 <link rel="stylesheet" href="./static/css/main.css">
 </head>
 <body>
-<div id="doc" style="width:80%"></div>
+<div id="doc"></div>
 <script type="text/md" id="md-text">
-# 模版
+## GLSL 语言
+GLSL 全称是 Graphics Library Shader Language （图形库着色器语言），是着色器使用的语言。
+
+### 如何引用
+GLSL 是通过字符串的方式用 js 加载到 WebGL 中使用的，有两种常用的引用方式：
+
+1. 通过字符串的方式引用
+```
+var source = `void main() {
+        gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
+    }
+`
+var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+gl.shaderSource(vertexShader,source);
+```
+这个方式使用着色器代码比较灵活，代码可以与 js 代码写在一起，比较方便管理，缺点是字符串格式的着色器代码不方便编写使用。
+2. 通过 script 标签来引用
+```
+<script type="x-shader/x-vertex" id="vertex-shader">
+void main() {
+    gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
+}
+<\/script>
+<script>
+    var source = document.querySelector("#vertex-shader").innerHTML;
+    var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+    gl.shaderSource(vertexShader,source);
+<\/script>
+```
+
+特别注意在上面这种方法的 script 标签中的 type 值要使用一个非标准的类型，因为只是用它来保存一段字符，不使用其他的功能。用这种方式可以使着色器的代码格式清晰。缺点是代码只能写在 HTML 文档中，不能写在 js 里，不方便代码统一管理。
 </script>
 <script src="./static/js/init.js" charset="utf-8"></script>
 <script src="./static/js/webgl-utils.js" charset="utf-8"></script>
