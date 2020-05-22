@@ -52,24 +52,24 @@ void main() {
             //加载编译片段着色器
             source = document.querySelector("#fragment-shader").innerHTML
             var fragmentShader = createShader(gl,gl.FRAGMENT_SHADER,source)
-    
+
             program = createProgram(gl,vertexShader,fragmentShader)
-    
+
             initialize(program)
             gl.useProgram(program)
         }
         function initialize(program) {
             gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer())
-    
+
             var a_position = gl.getAttribLocation(program,'a_position')
             gl.vertexAttribPointer(a_position, 3, gl.FLOAT, false, 0, 0)
             gl.enableVertexAttribArray(a_position)
-    
+
             v_color_position =  gl.getUniformLocation(program, "v_color")
         }
-    
+
         function startDraw(){
-            let vectors = [-1,0,0,1,0,0,0,1,0,0,-1,0,0,0,1,0,0,-1]
+            let vectors = [-1,0,0,1,0,0,0,-1,0,0,1,0,0,0,-1,0,0,1]
             const u_transformation = gl.getUniformLocation(program, "transformation")
             let transformation = mat4.create()
             let then = 0
@@ -79,25 +79,26 @@ void main() {
                 now *= 0.001;
                 var deltaTime = now - then;
                 then = now;
-                
+
                 mat4.identity(transformation)
-                rotate += 1.2 * deltaTime
-                
+                rotate += 2.2 * deltaTime
+
                 // mat4.rotateX(transformation, transformation, Math.PI/3*i%12) // 旋转
                 // mat4.projection(transformation,)
-                
-                mat4.lookAt(transformation,[0.5, 0.5, 0.5],[0,0,0],[0,1,0])
-                mat4.rotateY(transformation, transformation, rotate* Math.PI/6 ) // 旋转
+
+                mat4.lookAt(transformation,[0, 1, 1],[0,0,0],[0,1,0])
+
+                mat4.rotateY(transformation, transformation, Math.PI/2*rotate ) // 旋转
                 gl.uniformMatrix4fv(u_transformation, false, transformation)
                 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vectors), gl.STATIC_DRAW)
-                clearBg(gl,[0,0,0,1])
-                gl.uniform4f(v_color_position, 0,0,1,1)
-                gl.drawArrays(gl.LINES, 0, 2)
+                // clearBg(gl,[0,0,0,1])
                 gl.uniform4f(v_color_position, 1,0,0,1)
-                gl.drawArrays(gl.LINES, 2, 2)
+                gl.drawArrays(gl.LINES, 0, 2)
                 gl.uniform4f(v_color_position, 0,1,0,1)
+                gl.drawArrays(gl.LINES, 2, 2)
+                gl.uniform4f(v_color_position, 0,0,1,1)
                 gl.drawArrays(gl.LINES, 4, 2)
-                
+
                 requestAnimationFrame(render)
             }
             render(0)

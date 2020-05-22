@@ -8,6 +8,7 @@ function bg_fsh(){
 
     varying vec2 texCoord;
     varying vec2 screenCoord;
+    uniform sampler2D uSrc;
 
     void main(void) {
         vec3 col;
@@ -15,7 +16,8 @@ function bg_fsh(){
         vec2 tmpv = texCoord * vec2(0.8, 1.0) - vec2(0.95, 1.0);
         c = exp(-pow(length(tmpv) * 1.8, 2.0));
         col = mix(vec3(0.02, 0.0, 0.03), vec3(0.96, 0.98, 1.0) * 1.5, c);
-        gl_FragColor = vec4(col * 0.5, 1.0);
+        //gl_FragColor = vec4(col * 0.5, 1.0);
+        gl_FragColor = texture2D(uSrc, texCoord);
     }`
 }
 function fx_brightbuf_fsh(){
@@ -35,6 +37,7 @@ function fx_brightbuf_fsh(){
     }
     `
 }
+// not use
 function fx_common_fsh(){
     return `#ifdef GL_ES
     //precision mediump float;
