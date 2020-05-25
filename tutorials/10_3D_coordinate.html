@@ -69,7 +69,11 @@ void main() {
         }
 
         function startDraw(){
-            let vectors = [-1,0,0,1,0,0,0,-1,0,0,1,0,0,0,-1,0,0,1]
+            let vectors = [
+                -1,0,0,1,0,0,-0.9,0.1,0,-0.9,-0.1,0
+                0,-1,0,0,1,0,-0.9,0.1,0,-0.9,-0.1,0
+                0,0,-1,0,0,1
+            ]
             const u_transformation = gl.getUniformLocation(program, "transformation")
             let transformation = mat4.create()
             let then = 0
@@ -81,12 +85,12 @@ void main() {
                 then = now;
 
                 mat4.identity(transformation)
-                rotate += 2.2 * deltaTime
+                rotate += 0.2 * deltaTime
 
                 // mat4.rotateX(transformation, transformation, Math.PI/3*i%12) // 旋转
                 // mat4.projection(transformation,)
 
-                mat4.lookAt(transformation,[0, 1, 1],[0,0,0],[0,1,0])
+                mat4.lookAt(transformation,[0.5, 0.5, 0.5],[0,0,0],[0,1,0])
 
                 mat4.rotateY(transformation, transformation, Math.PI/2*rotate ) // 旋转
                 gl.uniformMatrix4fv(u_transformation, false, transformation)
