@@ -70,9 +70,14 @@ void main() {
 
         function startDraw(){
             let vectors = [
-                -1,0,0,1,0,0,-0.9,0.1,0,-0.9,-0.1,0
-                0,-1,0,0,1,0,-0.9,0.1,0,-0.9,-0.1,0
-                0,0,-1,0,0,1
+                -1,0,0,1,0,0,
+                0,-1,0,0,1,0,
+                0,0,-1,0,0,1,
+            ]
+            let vectors_1 = [
+                1,0,0, -0.9,0.1,0,-0.9,-0.1,0
+                0,1,0, -0.9,0.1,0,-0.9,-0.1,0
+                0,0,1, 0.1,0.9,0,-0.1,0.9,0
             ]
             const u_transformation = gl.getUniformLocation(program, "transformation")
             let transformation = mat4.create()

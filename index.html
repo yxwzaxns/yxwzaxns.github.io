@@ -8,11 +8,24 @@
 padding:0;
 margin:0;
 }
+.opengl{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+.opengl a{
+    color: #fff;
+}
+.opengl a:hover{
+    color: #ff00ff;
+}
 </style>
 </head>
 <body>
 <canvas id="sakura" style="display: block;height:100vh;width:100vw"></canvas>
-
+<div class="opengl">
+<a href="/tutorials">OpenGL</a>
+</div>
 <script src="/static/js/sakura-lib.js"></script>
 <script src="/static/js/sakura.js" charset="utf-8"></script>
 <script type="text/javascript">
