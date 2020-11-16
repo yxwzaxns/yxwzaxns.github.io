@@ -397,7 +397,7 @@
             margin-top: 16px;
             margin-left: 10px;
             background-repeat: no-repeat;
-            background-image: url(//www.lgstatic.com/lg-www-fed/mycenter/modules/simple_myresume_new/img/basic-sprite_fa961f7.png)
+            background-image: url(/resume_static/basic-sprite_fa961f7.png)
         }
 
         .basic .basic-info .icon-sex.icon-sex__male {
@@ -435,7 +435,7 @@
             width: 11px;
             height: 14px;
             margin-right: 5px;
-            background: url(//www.lgstatic.com/lg-www-fed/mycenter/modules/simple_myresume_new/img/basic-sprite_fa961f7.png);
+            background: url(/resume_static/basic-sprite_fa961f7.png);
             background-position: -88px -116px;
             background-repeat: no-repeat;
             display: inline-block;
@@ -446,7 +446,7 @@
             width: 14px;
             height: 11px;
             margin-right: 5px;
-            background: url(//www.lgstatic.com/lg-www-fed/mycenter/modules/simple_myresume_new/img/basic-sprite_fa961f7.png);
+            background: url(/resume_static/basic-sprite_fa961f7.png);
             background-position: -20px -144px;
             background-repeat: no-repeat;
             display: inline-block;
@@ -1477,252 +1477,329 @@
             visibility: hidden
         }
     </style>
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+    <script src="http://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style media="screen">
+        .tools{
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+        }
+        .tools .item{
+            cursor: pointer;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid gray;
+            border-radius: 5px
+        }
+        .tools .item:hover{
+            background-color: cadetblue;
+            color: seashell;
+            border: 1px solid brown;
+        }
+        .hide{
+            display: none;
+        }
+    </style>
 </head>
-
 <body>
-    <div class="container clearfix" id="container">
-        <div class="myresume">
-            <div class="basic" id="baseInfo">
-                <div class="basic-info">
-                    <div class="basic-name-area">
-                        <p class="basic-name female">廖前程</p>
-                        <i class="icon-sex icon-sex__male "></i>
-                        <div class="need-perfect dn basic-label" id="basicLabel">待完善</div>
-                    </div>
-                    <p class="basic-self">
-                        <span class="basic-exp">3年工作经验</span>
-                        <span class="basic-edu"> / 本科 . 统招 </span>
-                        <span class="basic-age"> / 27岁</span>
-                    </p>
-                    <p>
-                        <span class="basic-tel">
-                            <i class="basic-tel_icon"></i><span>13148334396</span>
-                        </span>
-                        <span class="basic-email">
-                            <i class="basic-email_icon"></i><span>i@aong.cn</span>
-                        </span>
-                    </p>
-                    <div style="padding-top:10px">
-                        <a class="social-page_content" href="https://github.com/yxwzaxns" target="_blank">
-                            <img src="https://www.lgstatic.com/common/image/social/github@2x.png" alt="">
-                            <span style="vertical-align: bottom;">https://github.com/yxwzaxns</span>
-                        </a>
-                    </div>
+<div class="container clearfix" id="container">
+    <div class="myresume">
+        <div class="basic" id="baseInfo">
+            <div class="basic-info">
+                <div class="basic-name-area">
+                    <p class="basic-name female">廖前程</p>
+                    <i class="icon-sex icon-sex__male "></i>
+                    <div class="need-perfect dn basic-label" id="basicLabel">待完善</div>
                 </div>
-            </div>
-
-            <div class="mr-template per" id="perAbility">
-                <div class="mr-template_title">
-                    <span>自我描述
-                        <div class="need-perfect dn" id="myRemarkLabel">待完善</div>
+                <p class="basic-self">
+                    <span class="basic-exp">3年工作经验</span>
+                    <span class="basic-edu"> / 本科 . 统招 </span>
+                    <span class="basic-age"> / 27岁</span>
+                </p>
+                <p>
+                    <span class="basic-tel">
+                        <i class="basic-tel_icon"></i><span>13148334396</span>
                     </span>
-                </div>
-
-                <div class="per-self_content">
-                    <div class="per-self_des">
-                        <ul>
-                            <li>
-                                <p>自学能力较强，能快速适应并使用新的技术。</p>
-                            </li>
-                            <li>
-                                <p>善于接受新事物，喜欢折腾各种新技术，有耐心。</p>
-                            </li>
-                            <li>
-                                <p>熟悉网络应用相关基础技术，能快速转换并熟悉相关开发技术。</p>
-                            </li>
-                            <li>
-                                <p>为人诚恳，工作认真负责，有较好的抗压能力。</p>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mr-template per" id="perAbility">
-                <div class="mr-template_title">
-                    <span>常用技能
-                        <div class="need-perfect dn" id="myRemarkLabel">待完善</div>
+                    <span class="basic-email">
+                        <i class="basic-email_icon"></i><span>i@aong.cn</span>
                     </span>
-                </div>
-
-                <div class="per-self_content">
-                    <div class="per-self_des">
-                        <ul>
-                            <li>熟悉Linux/Mac使用，Git，MySQL，Redis，shell编程, Docker等</li>
-                            <li>常用编程语言：PHP，Nodejs，Python，Golang，ES6等</li>
-                            <li>常用框架：Vuejs, Element, Electron, Gin, Codeigniter, Koa, Uni-app等</li>
-                            <li>熟悉微信小程序开发</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mr-template work-exp" id="workExp">
-                <div class="mr-template_title">
-                    <div class="work-title">工作经历
-                    </div>
-                </div>
-                <ol class="work-exp_group">
-                    <li class="work-exp_list" data-enddate="至今" data-startdate="2019.06" data-workid="17389845" data-visible="1" data-positiontype="后端开发" data-positiontype1="开发|测试|运维类" data-positiontype2="后端开发" data-companyindustry="企业服务">
-                        <p class="exp-list_time">2019.06-至今</p>
-                        <div class="exp-list_top">
-                            <div class="exp-list_right">
-                                <div class="exp-list_title strong">
-                                    <span>复达（广州）食品科技有限公司</span>
-                                    ／ <span>技术部</span>
-                                </div>
-                                <p>后端开发</p>
-                            </div>
-                        </div>
-                        <div class="exp-list_content">
-                            <p style="text-indent: 2em;">主要负责建立起相关的系统，比如数据查询平台，项目管理平台，搭建线上产品销售平台（微信小程序）等，把传统需要消耗人力的业务用互联网技术标准化，高效化。</p>
-                            <ul>
-                                <li>使用现有的合适技术帮助公司建立完善的食品原料相关数据查询平台（web端,小程序端），提高公司业务处理效率。</li>
-                                <li>建立一套完善的项目管理软件，方便公司，客户跟踪项目进度。</li>
-                                <li>基于微信平台建立公司自己的产品销售小程序平台。</li>
-                            </ul>
-                            <p></p>
-                        </div>
-                        <div class="exp-list_content_highlight"></div>
-                    </li>
-                    <li class="work-exp_list" data-enddate="2019.06" data-startdate="2018.07" data-workid="5349994" data-visible="1" data-positiontype="技术经理" data-positiontype1="开发|测试|运维类" data-positiontype2="高端技术职位"
-                        data-companyindustry="移动互联网,电子商务">
-
-                        <p class="exp-list_time">2018.07-2019.06</p>
-                        <div class="exp-list_top">
-                            <div class="exp-list_right">
-                                <div class="exp-list_title strong">
-                                    <span>桂林崇盛网络科技有限公司</span>
-                                    ／ <span>技术部</span>
-                                </div>
-                                <p>技术主管</p>
-                            </div>
-                        </div>
-                        <div class="exp-list_content">
-                            <p>准确分析项目需求，设计项目架构，协调团队资源，按时完成所分配的开发任务。</p>
-                        </div>
-                        <div class="exp-list_content_highlight"></div>
-                    </li>
-                </ol>
-            </div>
-
-        </div>
-        <div class="myresume">
-            <div class="mr-template pro-exp" id="proExp">
-                <div class="mr-template_title">
-                    <span>主要项目经历
-                    </span>
-                </div>
-                <ol class="pro-exp_group">
-                    <li class="pro-exp_list" data-enddate="至今" data-startdate="2019.06" data-projectid="10024157">
-                        <div class="editor-tool">
-                        </div>
-                        <div class="exp-list_title">
-                            <span class="exp-project_name">食品查询平台</span>
-                        </div>
-                        <p class="exp-list_time">2019.06-至今</p>
-                        <div class="exp-project_des">
-                            <p>参与建立全国食品原料，使用法规，用法用量等负责数据查询平台。提高公司和客户对数据搜索查询的效率。</p>
-                        </div>
-                        <div class="exp-list_content">
-                            <p></p>
-                            <ul>
-                                <li>设计项目业务流程</li>
-                                <li>基于 PHP + Mysql 完成项目代码编写，使用 全文索引 + Redis缓存来完成主要搜索功能</li>
-                                <li>建立资源自动化获取，更新流程，基于 Nodejs 编写通用网站数据下载软件，实现对网络公开资源的自动化获取，整理，并对接 Google 表格，同时自动更新网站数据</li>
-                                <li>建立平台对应的小程序端</li>
-                            </ul>
-                            <p></p>
-                        </div>
-                    </li>
-                    <li class="pro-exp_list" data-enddate="2020.10" data-startdate="2020.01" data-projectid="11051387">
-                        <div class="exp-list_title">
-                            <span class="exp-project_name">项目管理平台</span>
-                        </div>
-                        <p class="exp-list_time">2019.09-至今</p>
-                        <div class="exp-project_des">
-                            <p>建立统一的项目管理平台，统一管理每个项目所用的文件，项目文件变动追踪，内外用户权限隔离，用户分层权限隔离。对内为公司项目管理，对外为展示项目详情，进度，方便客户了解项目详情，进度。</p>
-                        </div>
-                        <div class="exp-list_content">
-                            <p>分析项目业务流程，整理完善业务逻辑，使用相关合适技术编写项目代码。</p>
-                        </div>
-                    </li>
-                    <li class="pro-exp_list" data-enddate="至今" data-startdate="2019.06" data-projectid="10024157">
-                        <div class="editor-tool">
-                        </div>
-                        <div class="exp-list_title">
-                            <span class="exp-project_name">微信微店小程序</span>
-                        </div>
-                        <p class="exp-list_time">2019.06-至今</p>
-                        <div class="exp-project_des">
-                            <p>基于微信平台建立公司的产品销售小程序平台</p>
-                        </div>
-                        <div class="exp-list_content">
-                            <p></p>
-                            <ul>
-                                <li>完成小程序端的代码</li>
-                                <li>使用小程序的云开发技术完成后台业务逻辑</li>
-                                <li>使用 Nodejs + Vue 开发商户自定义后台并对接小程序云开发后台</li>
-                            </ul>
-                            <p></p>
-                        </div>
-                    </li>
-                    <li class="pro-exp_list" data-enddate="2019.06" data-startdate="2019.02" data-projectid="10024110">
-                        <div class="exp-list_title">
-                            <span class="exp-project_name">视频转码管理平台</span>
-                        </div>
-                        <p class="exp-list_time">2019.01-2019.06</p>
-                        <div class="exp-project_des">
-                            <p>协调团队资源，参与完成视频转码管理平台，支持多用户上传，管理，分享视频 </p>
-                        </div>
-                        <div class="exp-list_content">
-                            <ul>
-                                <li>完成视频转码管理平台整体架构设计，编写后台业务代码</li>
-                                <li>基于分布式设计思想，使用一个管理节点，多个工作节点的架构，支持动态接入工作节点，实现小型任务调度功能。</li>
-                                <li>使用 FFmpeg 作为视频处理技术，支持自定义视频转码参数配置</li>
-                            </ul>
-                        </div>
-                    </li>
-                </ol>
-            </div>
-
-            <div class="mr-template edu-exp" id="eduExp">
-                <div class="mr-template_title">
-                    <span>
-                        教育经历
-                    </span>
-                </div>
-                <ol class="edu-exp_group">
-                    <li class="edu-exp_list" data-schoolname="桂林电子科技大学" data-startdate="2013.09" data-enddate="2017.09" data-education="本科" data-isUnifiedEntrance="1" data-professional="信息对抗技术" data-id="3317646">
-                        <p class="exp-list_time">2013.09-2018.09</p>
-                        <div class="exp-list_top">
-                            <img src="//www.lgstatic.com/i/image/M00/AD/4F/Cgp3O1i1E4OAZYxxAAARuPi89ns14.jpeg" alt="学校Logo">
-                            <div class="exp-list_right">
-                                <strong>
-                                    桂林电子科技大学
-                                </strong>
-                                <p>本科 . 统招 / 信息对抗技术</p>
-                            </div>
-                        </div>
-                    </li>
-                </ol>
-            </div>
-
-            <!-- <div class="mr-template social-page" id="socialPage">
-            <div class="mr-template_title">
-                <span>社交主页</span>
-            </div>
-            <ol class="social-page_group">
-                <li class="social-page_list" data-index="1">
+                </p>
+                <div style="padding-top:10px">
                     <a class="social-page_content" href="https://github.com/yxwzaxns" target="_blank">
-                        <img src="https://www.lgstatic.com/common/image/social/github@2x.png" alt="">
-                        <p>https://github.com/yxwzaxns</p>
+                        <img src="/resume_static/github@2x.png" alt="">
+                        <span style="vertical-align: bottom;">https://github.com/yxwzaxns</span>
                     </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="mr-template per" id="perAbility">
+            <div class="mr-template_title">
+                <span>自我描述
+                    <div class="need-perfect dn" id="myRemarkLabel">待完善</div>
+                </span>
+            </div>
+
+            <div class="per-self_content">
+                <div class="per-self_des">
+                    <ul>
+                        <li>
+                            <p>自学能力较强，能快速适应并使用新的技术。</p>
+                        </li>
+                        <li>
+                            <p>善于接受新事物，喜欢折腾各种新技术，有耐心。</p>
+                        </li>
+                        <li>
+                            <p>熟悉网络应用相关基础技术，能快速转换并熟悉相关开发技术。</p>
+                        </li>
+                        <li>
+                            <p>为人诚恳，工作认真负责，有较好的抗压能力。</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="mr-template per" id="perAbility">
+            <div class="mr-template_title">
+                <span>常用技能
+                    <div class="need-perfect dn" id="myRemarkLabel">待完善</div>
+                </span>
+            </div>
+
+            <div class="per-self_content">
+                <div class="per-self_des">
+                    <ul>
+                        <li>熟悉Linux/Mac使用，Git，MySQL，Redis，shell编程, Docker等</li>
+                        <li>常用编程语言：PHP，Nodejs，Python，Golang，ES6等</li>
+                        <li>常用框架：Vuejs, Element, Electron, Gin, Codeigniter, Koa, Uni-app等</li>
+                        <li>熟悉微信小程序开发</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="mr-template work-exp" id="workExp">
+            <div class="mr-template_title">
+                <div class="work-title">工作经历
+                </div>
+            </div>
+            <ol class="work-exp_group">
+                <li class="work-exp_list" data-enddate="至今" data-startdate="2019.06" data-workid="17389845" data-visible="1" data-positiontype="后端开发" data-positiontype1="开发|测试|运维类" data-positiontype2="后端开发" data-companyindustry="企业服务">
+                    <p class="exp-list_time">2019.06-至今</p>
+                    <div class="exp-list_top">
+                        <div class="exp-list_right">
+                            <div class="exp-list_title strong">
+                                <span>复达（广州）食品科技有限公司</span>
+                                ／ <span>技术部</span>
+                            </div>
+                            <p>后端开发</p>
+                        </div>
+                    </div>
+                    <div class="exp-list_content">
+                        <p style="text-indent: 2em;">主要负责建立起相关的系统，比如数据查询平台，项目管理平台，搭建线上产品销售平台（微信小程序）等，把传统需要消耗人力的业务用互联网技术标准化，高效化。</p>
+                        <ul>
+                            <li>使用现有的合适技术帮助公司建立完善的食品原料相关数据查询平台（web端,小程序端），提高公司业务处理效率。</li>
+                            <li>建立一套完善的项目管理软件，方便公司，客户跟踪项目进度。</li>
+                            <li>基于微信平台建立公司自己的产品销售小程序平台。</li>
+                        </ul>
+                        <p></p>
+                    </div>
+                    <div class="exp-list_content_highlight"></div>
+                </li>
+                <li class="work-exp_list" data-enddate="2019.06" data-startdate="2018.07" data-workid="5349994" data-visible="1" data-positiontype="技术经理" data-positiontype1="开发|测试|运维类" data-positiontype2="高端技术职位"
+                    data-companyindustry="移动互联网,电子商务">
+
+                    <p class="exp-list_time">2018.07-2019.06</p>
+                    <div class="exp-list_top">
+                        <div class="exp-list_right">
+                            <div class="exp-list_title strong">
+                                <span>桂林崇盛网络科技有限公司</span>
+                                ／ <span>技术部</span>
+                            </div>
+                            <p>技术主管</p>
+                        </div>
+                    </div>
+                    <div class="exp-list_content">
+                        <p>准确分析项目需求，设计项目架构，协调团队资源，按时完成所分配的开发任务。</p>
+                    </div>
+                    <div class="exp-list_content_highlight"></div>
                 </li>
             </ol>
-        </div> -->
         </div>
-    </div>
-</body>
 
+    </div>
+    <div class="myresume">
+        <div class="mr-template pro-exp" id="proExp">
+            <div class="mr-template_title">
+                <span>主要项目经历
+                </span>
+            </div>
+            <ol class="pro-exp_group">
+                <li class="pro-exp_list" data-enddate="至今" data-startdate="2019.06" data-projectid="10024157">
+                    <div class="editor-tool">
+                    </div>
+                    <div class="exp-list_title">
+                        <span class="exp-project_name">食品查询平台</span>
+                    </div>
+                    <p class="exp-list_time">2019.06-至今</p>
+                    <div class="exp-project_des">
+                        <p>参与建立全国食品原料，使用法规，用法用量等负责数据查询平台。提高公司和客户对数据搜索查询的效率。</p>
+                    </div>
+                    <div class="exp-list_content">
+                        <p></p>
+                        <ul>
+                            <li>设计项目业务流程</li>
+                            <li>基于 PHP + Mysql 完成项目代码编写，使用 全文索引 + Redis缓存来完成主要搜索功能</li>
+                            <li>建立资源自动化获取，更新流程，基于 Nodejs 编写通用网站数据下载软件，实现对网络公开资源的自动化获取，整理，并对接 Google 表格，同时自动更新网站数据</li>
+                            <li>建立平台对应的小程序端</li>
+                        </ul>
+                        <p></p>
+                    </div>
+                </li>
+                <li class="pro-exp_list" data-enddate="2020.10" data-startdate="2020.01" data-projectid="11051387">
+                    <div class="exp-list_title">
+                        <span class="exp-project_name">项目管理平台</span>
+                    </div>
+                    <p class="exp-list_time">2019.09-至今</p>
+                    <div class="exp-project_des">
+                        <p>建立统一的项目管理平台，统一管理每个项目所用的文件，项目文件变动追踪，内外用户权限隔离，用户分层权限隔离。对内为公司项目管理，对外为展示项目详情，进度，方便客户了解项目详情，进度。</p>
+                    </div>
+                    <div class="exp-list_content">
+                        <p>分析项目业务流程，整理完善业务逻辑，使用相关合适技术编写项目代码。</p>
+                    </div>
+                </li>
+                <li class="pro-exp_list" data-enddate="至今" data-startdate="2019.06" data-projectid="10024157">
+                    <div class="editor-tool">
+                    </div>
+                    <div class="exp-list_title">
+                        <span class="exp-project_name">微信微店小程序</span>
+                    </div>
+                    <p class="exp-list_time">2019.06-至今</p>
+                    <div class="exp-project_des">
+                        <p>基于微信平台建立公司的产品销售小程序平台</p>
+                    </div>
+                    <div class="exp-list_content">
+                        <p></p>
+                        <ul>
+                            <li>完成小程序端的代码</li>
+                            <li>使用小程序的云开发技术完成后台业务逻辑</li>
+                            <li>使用 Nodejs + Vue 开发商户自定义后台并对接小程序云开发后台</li>
+                        </ul>
+                        <p></p>
+                    </div>
+                </li>
+                <li class="pro-exp_list" data-enddate="2019.06" data-startdate="2019.02" data-projectid="10024110">
+                    <div class="exp-list_title">
+                        <span class="exp-project_name">视频转码管理平台</span>
+                    </div>
+                    <p class="exp-list_time">2019.01-2019.06</p>
+                    <div class="exp-project_des">
+                        <p>协调团队资源，参与完成视频转码管理平台，支持多用户上传，管理，分享视频 </p>
+                    </div>
+                    <div class="exp-list_content">
+                        <ul>
+                            <li>完成视频转码管理平台整体架构设计，编写后台业务代码</li>
+                            <li>基于分布式设计思想，使用一个管理节点，多个工作节点的架构，支持动态接入工作节点，实现小型任务调度功能。</li>
+                            <li>使用 FFmpeg 作为视频处理技术，支持自定义视频转码参数配置</li>
+                        </ul>
+                    </div>
+                </li>
+            </ol>
+        </div>
+
+        <div class="mr-template edu-exp" id="eduExp">
+            <div class="mr-template_title">
+                <span>
+                    教育经历
+                </span>
+            </div>
+            <ol class="edu-exp_group">
+                <li class="edu-exp_list" data-schoolname="桂林电子科技大学" data-startdate="2013.09" data-enddate="2017.09" data-education="本科" data-isUnifiedEntrance="1" data-professional="信息对抗技术" data-id="3317646">
+                    <p class="exp-list_time">2013.09-2018.09</p>
+                    <div class="exp-list_top">
+                        <img src="/resume_static/Cgp3O1i1E4OAZYxxAAARuPi89ns14.jpeg" alt="学校Logo">
+                        <div class="exp-list_right">
+                            <strong>
+                                桂林电子科技大学
+                            </strong>
+                            <p>本科 . 统招 / 信息对抗技术</p>
+                        </div>
+                    </div>
+                </li>
+            </ol>
+        </div>
+
+        <!-- <div class="mr-template social-page" id="socialPage">
+        <div class="mr-template_title">
+            <span>社交主页</span>
+        </div>
+        <ol class="social-page_group">
+            <li class="social-page_list" data-index="1">
+                <a class="social-page_content" href="https://github.com/yxwzaxns" target="_blank">
+                    <img src="https://www.lgstatic.com/common/image/social/github@2x.png" alt="">
+                    <p>https://github.com/yxwzaxns</p>
+                </a>
+            </li>
+        </ol>
+    </div> -->
+    </div>
+</div>
+<div class="tools">
+    <div class="item down_pdf">
+        下载PDF
+    </div>
+    <div class="item go_top hide">
+        回到顶部
+    </div>
+</div>
+<script type="text/javascript">
+async function downPDF() {
+    goTop()
+    const downBtn = document.getElementsByClassName('down_pdf')[0]
+    downBtn.style.backgroundColor = "ghostwhite"
+    downBtn.style.color = "#000"
+    setTimeout(()=>{
+        downBtn.style.backgroundColor = ""
+        downBtn.style.color = ""
+    },100)
+    const filename  = 'resume.pdf';
+    const myResume = document.getElementsByClassName('myresume')
+    const pdf = new jspdf.jsPDF('p', 'mm', 'a4')
+    for (let i = 0; i < myResume.length; i++) {
+        const canvas = await html2canvas(myResume[i],{
+            width: 730,
+            // height: 277,
+            imageTimeout:0
+        })
+        if(i>0) pdf.addPage()
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 10, 10, 190, 277)
+    }
+    pdf.save(filename)
+}
+function goTop() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+}
+function scrollEvent() {
+    const goTopBtn = document.getElementsByClassName('go_top')[0]
+    if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        goTopBtn.style.display = "block"
+    } else {
+        goTopBtn.style.display = "none"
+    }
+}
+
+!function() {
+    document.getElementsByClassName('go_top')[0]
+        .addEventListener('click', goTop)
+    document.getElementsByClassName('down_pdf')[0]
+        .addEventListener('click', downPDF)
+    window.onscroll = scrollEvent
+    console.log('init end')
+}()
+
+</script>
+</body>
 </html>
