@@ -680,14 +680,14 @@ only screen and (min-resolution:2dppx) {
 
 .per .per-self_content {
     position: relative;
-    padding: 5px 0
+    /* padding: 5px 0 */
 }
 
 .per .per-self_content .per-self_des {
-    margin-top: 13px;
+    margin-top: 4px;
     font-size: 14px;
     color: #000;
-    line-height: 30px
+    line-height: 26px
 }
 
 .per .per-self_content .per-self_des p {
@@ -765,7 +765,7 @@ only screen and (min-resolution:2dppx) {
 
 .work-exp .work-exp_list {
     position: relative;
-    margin-bottom: 30px
+    margin-bottom: 20px
 }
 
 .work-exp .work-exp_list .exp-list_time {
@@ -868,7 +868,7 @@ only screen and (min-resolution:2dppx) {
 
 .pro-exp .pro-exp_list {
     position: relative;
-    margin-bottom: 30px
+    margin-bottom: 20px
 }
 
 .pro-exp .pro-exp_list .exp-list_title {
@@ -1265,13 +1265,13 @@ only screen and (min-resolution:2dppx) {
 }
 
 .mr-template {
-    padding: 20px 50px 10px
+    padding: 8px 50px 0px
 }
 
 .mr-template .mr-template_title {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px
+    margin-bottom: 6px
 }
 
 .mr-template .mr-template_title span {
