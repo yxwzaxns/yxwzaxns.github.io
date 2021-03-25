@@ -1,0 +1,20 @@
+.tools{
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+}
+.tools .item{
+    cursor: pointer;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid gray;
+    border-radius: 5px
+}
+.tools .item:hover{
+    background-color: cadetblue;
+    color: seashell;
+    border: 1px solid brown;
+}
+.tools .hide{
+    display: none;
+}
