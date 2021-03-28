@@ -15,6 +15,31 @@
     color: seashell;
     border: 1px solid brown;
 }
+.tools .item:active{
+    background-color: ghostwhite;
+    color: #000;
+}
 .tools .hide{
     display: none;
+}
+#cover{
+    height: 100vh;
+    width: 100vw;
+    position:fixed;
+    top:0;
+    left: 0;
+    background: rgba(1,2,2,0.8);
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+}
+#cover .info{
+    width: 200px;
+    background-color: cornsilk;
+    padding: 20px;
+    border-radius: 5px;
+    font-size: 20px;
+    text-align: center;
 }

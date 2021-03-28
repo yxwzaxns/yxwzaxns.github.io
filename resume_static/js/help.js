@@ -1,18 +1,27 @@
 async function downPDF() {
     goTop()
-    const downBtn = document.getElementsByClassName('down_pdf')[0]
-    downBtn.style.backgroundColor = "ghostwhite"
-    downBtn.style.color = "#000"
-    setTimeout(()=>{
-        downBtn.style.backgroundColor = ""
-        downBtn.style.color = ""
-    },100)
-    const filename  = '廖前程的简历.pdf';
-    const myResume = document.getElementsByClassName('myresume')
     showPersonInfo()
-
-    console.log(myResume[0].querySelector('.basic-name'));
-    const pdf = new jspdf.jsPDF('p', 'mm', 'a4')
+    const cover = document.querySelector('#cover')
+    console.log(cover);
+    cover.style.visibility = 'visible'
+    await createPdf('myresume')
+    setTimeout(()=>{
+        hidePersonInfo()
+        cover.style.visibility = 'hidden'
+    },500)
+    
+}
+async function createPdf(nodeClassName){
+    const filename  = '廖前程的简历.pdf';
+    const myResume = document.getElementsByClassName(nodeClassName)
+    // A4 210x297 mm
+    const pdf = new jspdf.jsPDF({
+        orientation: 'p',
+        unit: 'mm',
+        fomat: 'a4'
+    })
+    pdf.setTextColor('#666')
+    const createDate = new Date().toLocaleDateString()
     for (let i = 0; i < myResume.length; i++) {
         const canvas = await html2canvas(myResume[i],{
             width: 730,
@@ -20,10 +29,16 @@ async function downPDF() {
             imageTimeout:0
         })
         if(i>0) pdf.addPage()
-        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 10, 10, 190, 277)
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 10, 10, 190, 277,'','FAST')
+        pdf.setFontSize(10)
+        pdf.text(`Created on ${createDate}. For the latest version of resume, please visit https://aong.cn/resume.html`, 12, 292)
     }
-    pdf.save(filename)
-    setTimeout(()=>{hidePersonInfo()},2000)
+    // pdf.autoPrint({variant: 'non-conform'}) 预览时自动打开打印框
+    if(location.href.includes('localhost')){
+        pdf.output('dataurlnewwindow')
+    }else{
+        pdf.save(filename)
+    }
 }
 function showPersonInfo() {
     const myResume = document.querySelectorAll('.myresume')
