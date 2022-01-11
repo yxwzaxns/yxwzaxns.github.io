@@ -1466,3 +1466,14 @@ only screen and (min-resolution:2dppx) {
 .portfolio-page .portfolio-list:hover .portfolio-del {
     visibility: hidden
 }
+
+.github-icon{
+    background: url(/resume_static/github@2x.png);
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    background-position: center;
+    background-size: cover;
+    margin-right: 5px;
+    vertical-align: middle;
+}
