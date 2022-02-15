@@ -2,10 +2,11 @@ async function downPDF() {
     goTop()
     showPersonInfo()
     const cover = document.querySelector('#cover')
-    console.log(cover);
     cover.style.visibility = 'visible'
+    document.querySelectorAll('.contact-item i').forEach(e=> e.style.marginTop = '5px')
     await createPdf('myresume')
     setTimeout(()=>{
+        document.querySelectorAll('.contact-item i').forEach(e=> e.style.marginTop = 'unset')
         hidePersonInfo()
         cover.style.visibility = 'hidden'
     },500)
@@ -29,7 +30,7 @@ async function createPdf(nodeClassName){
             imageTimeout:0
         })
         if(i>0) pdf.addPage()
-        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 10, 10, 190, 277,'','FAST')
+        pdf.addImage(canvas.toDataURL('image/jpeg',1), 'jpeg', 10, 10, 190, 277,'','SLOW')
         pdf.setFontSize(10)
         pdf.text(`Created on ${createDate}. For the latest version of resume, please visit https://aong.cn/resume.html`, 12, 292)
     }

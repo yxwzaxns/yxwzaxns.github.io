@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "Noto Serif SC";
+    src: url("./NotoSerifSC-Regular.otf");
+  }
+
 * {
     outline: 0
 }
@@ -6,8 +11,9 @@ body {
     margin: 0;
     padding: 0;
     font-size: 14px;
-    font-family: "Hiragino Sans GB", "Microsoft Yahei", SimSun, Arial, "Helvetica Neue", Helvetica;
-    color: #000;
+    font-family: "Noto Serif SC", "Hiragino Sans GB", "Microsoft Yahei", SimSun, Arial, "Helvetica Neue", Helvetica;
+    font-weight: normal;
+    color: rgb(17, 16, 16);
     word-wrap: break-word;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale
@@ -364,7 +370,9 @@ p {
 .basic .basic-info .basic-name-area {
     overflow: hidden;
     height: 37px;
-    margin-bottom: 11px
+    margin-bottom: 11px;
+    display: flex;
+    flex-direction: row;
 }
 
 .basic .basic-info .basic-name {
@@ -401,23 +409,33 @@ p {
     margin-top: 20px
 }
 
-.basic .basic-info p {
+.basic .basic-info .contact {
     font-size: 14px;
     color: #333;
     line-height: 20px;
-    margin-top: 6px
+    margin-top: 6px;
+    display: flex;
+    flex-direction: row;
 }
 
-.basic .basic-info .basic-tel {
+.basic .basic-info .contact .contact-item {
+    display: flex;
+    flex-direction: row;
+    margin-right: 20px;
+    align-items: center;
+}
+
+.basic .basic-info .basic-tel
+.basic .basic-info .basic-email {
     margin-right: 20px
 }
 
 .basic .basic-info .basic-tel span {
-    vertical-align: middle
+    vertical-align: baseline
 }
 
 .basic .basic-info .basic-email span {
-    vertical-align: middle
+    vertical-align: baseline
 }
 
 .basic .basic-info .basic-tel_icon {
@@ -427,8 +445,6 @@ p {
     background: url(/resume_static/basic-sprite_fa961f7.png);
     background-position: -88px -116px;
     background-repeat: no-repeat;
-    display: inline-block;
-    vertical-align: middle
 }
 
 .basic .basic-info .basic-email_icon {
@@ -438,8 +454,16 @@ p {
     background: url(/resume_static/basic-sprite_fa961f7.png);
     background-position: -20px -144px;
     background-repeat: no-repeat;
-    display: inline-block;
-    vertical-align: middle
+ 
+}
+
+.basic .basic-info .github-icon{
+    background: url(/resume_static/github@2x.png);
+    width: 14px;
+    height: 14px;
+    background-position: center;
+    background-size: cover;
+    margin-right: 5px;
 }
 
 .basic .basic-label {
@@ -1083,8 +1107,6 @@ only screen and (min-resolution:2dppx) {
     background-color: rgba(0, 0, 0, .8)
 }
 
-#galpop-container {}
-
 #galpop-wrapper.loaded-ajax #galpop-container,
 #galpop-wrapper.loaded-iframe #galpop-container {
     width: 70vw;
@@ -1465,15 +1487,4 @@ only screen and (min-resolution:2dppx) {
 
 .portfolio-page .portfolio-list:hover .portfolio-del {
     visibility: hidden
-}
-
-.github-icon{
-    background: url(/resume_static/github@2x.png);
-    width: 14px;
-    height: 14px;
-    display: inline-block;
-    background-position: center;
-    background-size: cover;
-    margin-right: 5px;
-    vertical-align: middle;
 }
